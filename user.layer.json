@@ -1,0 +1,108 @@
+{
+	"tpl":"*user/user.tpl",
+	"data":"*user/user.php",
+	"seojsontpl":"*seo/{crumb.name}.json",
+	"tplroot":"root",
+	"divs":{
+		"userbreadcrumbs":{
+			"tpl":"*user/user.tpl",
+			"json":"*user/user.php?type=user",
+			"tplroot":"breadcrumbs",
+			"parsedtpl":"{crumb.child.name}",
+			"global":"user"
+		},
+		"userbody":{
+			"title":"Personal account",
+			"tpl":"*user/user.tpl",
+			"json":"*user/user.php?type=user",
+			"tplroot":"user",
+			"showanimate":true,
+			"global":"user",
+			"unick":"user",
+			"unicklayer":"user",
+			"unicklayertochild":true,
+			"childs":{
+				"signup":{
+					"seojsontpl":"*seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Sign Up",
+					"tpl":"*user/user.tpl",
+					"jsontpl":"*user/user.php?type={crumb.name}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"onsubmit":true,
+					"global":"user"
+				},
+				"logout":{
+					"seojsontpl":"*seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Logout",
+					"tpl":"*user/user.tpl",
+					"jsontpl":"*user/user.php?type={crumb.name}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"onsubmit":true,
+					"global":"user"
+				},
+				"signin":{
+					"seojsontpl":"*seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Sign In",
+					"tpl":"*user/user.tpl",
+					"jsontpl":"*user/user.php?type={crumb.name}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"onsubmit":true,
+					"global":"user"
+				},
+				"remindkey":{
+					"seojsontpl":"*seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Set a new password",
+					"tpl":"*user/user.tpl",
+					"tplroottpl":"{crumb.name}",
+					"jsontpl":"*user/user.php?type={crumb.name}&email={crumb.child.name}&key={crumb.child.child.name}",
+					"autosavename":"user",
+					"onsubmit":true,
+					"global":"user"
+				},
+				"remind":{
+					"seojsontpl":"*seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Forgot Password",
+					"tpl":"*user/user.tpl",
+					"jsontpl":"*user/user.php?type={crumb.name}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"onsubmit":true,
+					"global":"user"
+				},
+				"change":{
+					"seojsontpl":"*seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Change Password",
+					"tpl":"*user/user.tpl",
+					"jsontpl":"*user/user.php?type={crumb.name}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"onsubmit":true,
+					"global":"user"
+				},
+				"confirm":{
+					"seojsontpl":"*seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Confirm your email",
+					"tpl":"*user/user.tpl",
+					"jsontpl":"*user/user.php?type={crumb.name}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"onsubmit":true,
+					"global":"user"
+				},
+				"confirmkey":{
+					"seojsontpl":"*seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Confirm your email",
+					"tpl":"*user/user.tpl",
+					"tplroottpl":"{crumb.name}",
+					"jsontpl":"*user/user.php?type={crumb.name}&email={crumb.child.name}&key={crumb.child.child.name}",
+					"autosavename":"user",
+					"onsubmit":true,
+					"global":"user"
+				}
+			}
+		}
+	}
+}
