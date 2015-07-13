@@ -23,7 +23,7 @@
 			if(function_exists('aws_mail')){
 				return aws_mail($to,$email,$mailroot,$data);
 			}else{
-				return user_mail($to,$email,$mailroot,$data);
+				return user::mail($to,$email,$mailroot,$data);
 			}
 		}
 		static function getEmail(){
