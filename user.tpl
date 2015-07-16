@@ -176,7 +176,7 @@
 {form:}
 <div class="row">
 			<div class="col-md-6">
-	<form class="form-horizontal" action="infra/plugins/infra/theme.php?*user/user.php?type={tplroot}&submit=1" method="POST">		
+	<form class="form-horizontal" action="?*user/user.php?type={tplroot}&submit=1" method="POST">		
 		{/form:}
 <div>
 	{config.ans.msg:alert}

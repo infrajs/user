@@ -1,5 +1,6 @@
 {
     "user":{
+    	"sentEmail":"itlife\\user\\User::mail",
         "admins":[]
     }
 }

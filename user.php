@@ -1,190 +1,72 @@
 <?php
-	use itlife\user\user;
-	infra_require('*user/user.inc.php');
-	infra_require('*session/session.php');
-	$ans=array();
-	$submit=!empty($_GET['submit']);
-	$type=(string)@$_GET['type'];
-	$ans['id']=infra_session_initId();
-	$ans['admin']=user::isAdmin();
-	$myemail=infra_session_getEmail();
-	$ans['email']=$myemail;
-	if($type=='signup'){
-		if($myemail)return infra_err($ans,'You are logged in.');
-		if($submit){
-			if(!$ans['id'])return infra_err($ans,'The error on the server. Session is not initialized, try again later.');
-			
-			$email=trim(strip_tags($_POST['email']));
-			if(!user_checkData($email, 'email'))return infra_err($ans,'You must specify a valid email address');
-			
-			$user = infra_session_getUser($email);// еще надо проверить есть ли уже такой емаил
-			if($user['session_id'])return infra_err($ans,'This email already registered.');
+namespace itlife\user;
 
-			$password=trim($_POST['password']);
-			if(!user_checkData($password, 'password'))return infra_err($ans,'You must specify a valid password');
+infra_require('*session/session.php');
 
-			$repeatpassword=trim($_POST['repeatpassword']);
-			if($password!=$repeatpassword)return infra_err($ans,'Passwords do not match.');
+class User
+{
+	public static function isAdmin()
+	{
+		$email = infra_session_getEmail();
+		if (!$email) {
+			return false;
+		}
+		$verify = infra_session_getVerify();
+		if (!$verify) {
+			return false;
+		}
+		$conf = infra_config();
 
-			$myemail=infra_session_getEmail();
-			if($myemail)return infra_err($ans,'You are already logged in');//Значит пользователь не зарегистрирован
-			
-			
+		return in_array($email, $conf['user']['admins']);
+	}
+	public static function get()
+	{
+		$json = '*user/user.php';
+		$user = infra_loadJSON($json);
 
-			$term=trim($_POST['terms']);
-			if(!$term)return infra_err($ans,'You need to accept the terms of service.');
-
-			$password=md5($email.$password);
-			$data=array();
-			$data['key']=md5($password.date('Y.m.j'));
-			infra_session_setEmail($email);
-			infra_session_setPass($password);
-			infra_view_setCookie(infra_session_getName('pass'),md5($password));
-			$ans['go']='?user';
-			infra_session_set('safe.confirmtime',time());
-			$msg=user_sentEmail($email,'signup',$data);
-			if(is_string($msg))return infra_err($ans,$msg);
-			
-			return infra_ret($ans,'You have successfully registered. We sent you a letter.');
+		return $user;
+	}
+	public static function sentEmail($email, $tpl, $data)
+	{
+		$conf=infra_conf();
+		call_user_func($conf['user']['sentEmail'], $email, $tpl, $data);
+	}
+	public static function getEmail()
+	{
+		return infra_session_getEmail();
+	}
+	public static function checkData($str, $type = 'value')
+	{
+		switch ($type) {
+			case 'radio':
+				return !!$str;
+			case 'value':
+				return $str && strlen($str) > 1;
+			case 'password':
+				return $str && strlen($str) > 5;
+			case 'email':
+				return $str && preg_match('/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/', $str);
 		}
 	}
-	if($type=='remindkey'){
-		if($myemail)return infra_err($ans,'You are already logged in.');
-		$key=$_REQUEST['key'];
-		if(!$key)return infra_err($ans,'Incorrect link');
-		$email=trim(strip_tags($_REQUEST['email']));
-		if(!user_checkData($email,'email'))return infra_err($ans,'Incorrect link');
-		$userData = infra_session_getUser($email);
-		$realkey=md5($userData['password'].date('Y.m.j'));
-		if($realkey!==$key)return infra_err($ans,'Link outdated.');
-		if($submit){
-			$password=trim($_POST['password']);
-			if(!user_checkData($password, 'password'))return infra_err($ans,'You must specify a valid password');
-			$repeatpassword=trim($_POST['repeatpassword']);
-			if($password!=$repeatpassword)return infra_err($ans,'Passwords do not match.');
-
-
-
-			infra_session_setPass(md5($email.$password),$userData['session_id']);
-			infra_session_change($userData['session_id']);
-
-			$msg=user_sentEmail($email,'newpass');
-			$ans['go']='?user';
-			$ans['popup']=true;
-			//Если popup true значит сообщение нужно дополнительно вывести во всплывающем окне'
-			//Окно success требуется
-			return infra_ret($ans,'Password changed. You are logged in.');
+	public static function mail($email, $mailroot, $data = array())
+	{
+		if (!$email) {
+			return 'Wrong email.';
 		}
-	}
-	if($type=='remind'){
-		if($myemail)return infra_err($ans,'You are logged in.');
-		$ans['time']=infra_session_get('safe.remindtime');
-		if($submit){
-			$time=time();
-			if(!$conf['debug']){
-				if($ans['time']&&$ans['time']+5*60>$time)return infra_err($ans,'Follow-up letter can be sent in 5 minutes.');
-			}
-			$email=trim(strip_tags($_POST['email']));
+		if (!$mailroot) {
+			return;
+		}//Когда нет указаний в конфиге... ничего такого...
+		$tpl = '*user/user.mail.tpl';
 
-			if(!user_checkData($email, 'email'))return infra_err($ans,'You must specify a valid email address.');
-			if($myemail)return infra_err($ans,'You are already logged in.');
-			
-			$user = infra_session_getUser($email);
-			if(!$user['session_id']) return infra_err($ans,'Email has not been registered yet.');
-			$data['key']=md5($user['password'].date('Y.m.j'));//Пароль для востановления действует только сегодня и после смены пароля действовать перестанет
-			$msg=user_sentEmail($email,'remind',$data);
-			if(is_string($msg))return infra_err($ans,$msg);
-			infra_session_set('safe.remindtime',time());
-			return infra_ret($ans,'We sent you a letter. Follow the instructions in the letter.');
-			
-		}
-		return infra_ret($ans);
-	}
-	if($type=='confirm'){
-		if(!$myemail)return infra_err($ans,'You are not logged in.');
-		$ans['time']=infra_session_get('safe.confirmtime');
-		if($submit){
-			$oldtime=infra_session_get('safe.confirmtime');
-			$time=time();
-			$conf=infra_config();
-			if(!$conf['debug']){
-				if($oldtime&&$oldtime+5*60>$time)return infra_err($ans,'Follow-up letter can be sent in 5 minutes.');
-			}
-			
-			$user = infra_session_getUser();
-			if(!$user['email']) return infra_err($ans,'Email has not been registered yet.');
-			$data['key']=md5($user['password'].date('Y.m.j'));
+		$data['host'] = infra_view_getHost();
+		$data['path'] = infra_view_getRoot();
+		$data['email'] = $email;
+		$data['time'] = time();
+		$data['site'] = $data['host'].'/'.$data['path'];
 
-			infra_session_set('safe.confirmtime',$time);
+		$subject = infra_template_parse($tpl, $data, $mailroot.'-subject');
+		$body = infra_template_parse($tpl, $data, $mailroot);
 
-			$msg=user_sentEmail($myemail,'confirm',$data);
-			if(is_string($msg))return infra_err($ans,$msg);
-			return infra_ret($ans,'We sent you a letter. Follow the instructions in the letter.');
-		}
+		return infra_mail_fromAdmin($subject, $email, $body);
 	}
-	if($type=='confirmkey'){
-		if(!$myemail)return infra_err($ans,'You are not logged in.');
-		$verify=infra_session_getVerify();
-		if($verify)return infra_ret($ans,'Address already verified.');
-		$key=$_REQUEST['key'];
-		if(!$key)return infra_err($ans,'Incorrect link');
-		$email=trim(strip_tags($_REQUEST['email']));
-		if(!user_checkData($email,'email'))return infra_err($ans,'Incorrect link');
-
-		$userData = infra_session_getUser();
-		$realkey=md5($userData['password'].date('Y.m.j'));
-		if($realkey!==$key)return infra_err($ans,'Link outdated.');
-		infra_session_setVerify();
-		return infra_ret($ans,'All done. Address verified.');
-	}
-	if($type=='change'){
-		if(!$myemail)return infra_err($ans,'You are not logged in.');
-		if($submit){
-			$oldpassword=trim($_POST['oldpassword']);
-			$newpassword=trim($_POST['newpassword']);
-			$repeatnewpassword=trim($_POST['repeatnewpassword']);
-			
-			if(!user_checkData($oldpassword, 'password'))return infra_err($ans,'You must specify a valid old password.');
-			
-			$oldpas=md5($myemail.$oldpassword);
-			$user=infra_session_getUser();
-			if($user['password']!=$oldpas)return infra_err($ans,'Invalid current password.');
-
-			if(!user_checkData($newpassword, 'password'))return infra_err($ans,'You must specify a valid new password.');
-			$newpas=md5($myemail.$newpassword);
-			if($newpassword!=$repeatnewpassword)return infra_err($ans,'Passwords do not match.');
-			
-			infra_session_setPass($newpas);
-			infra_view_setCookie(infra_session_getName('pass'),md5($newpas));
-			$msg=user_sentEmail($email,'newpass');
-			return infra_ret($ans,'Password changed.');
-		}
-	}
-	if($type=='signin'){
-		if($myemail)return infra_err($ans,'You are already logged in.');
-		if($submit){
-			$email=trim(strip_tags($_POST['email']));
-			if(!user_checkData($email, 'email'))return infra_err($ans,'You must specify a valid email address.');
-
-			$userData=infra_session_getUser($email);
-			$password=trim($_POST['password']);
-			if(md5($email.$password)!=$userData['password'])return infra_err($ans,'Wrong password or email.');
-			infra_session_change($userData['session_id']);
-			$ans['go']='?user';
-			return infra_ret($ans,'You are logged in.');
-		}
-	}
-	if($type=='logout'){
-		if(!$myemail)return infra_err($ans,'You are not logged in.');
-		if($submit){
-			infra_session_logout();
-			$ans['go']='?user';
-			return infra_ret($ans,'Your status guest.');
-		}
-	}
-	if($type=='user'){
-		$ans['verify']=infra_session_getVerify();
-	}
-	
-	return infra_ret($ans);
-?>
+}
