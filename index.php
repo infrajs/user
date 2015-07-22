@@ -1,6 +1,7 @@
 <?php
 
 use itlife\user\User;
+
 infra_require('*session/session.php');
 $ans = array();
 $submit = !empty($_GET['submit']);
@@ -110,7 +111,9 @@ if ($type == 'remind') {
 	$ans['time'] = infra_session_get('safe.remindtime');
 	if ($submit) {
 		$time = time();
-		if (!$conf['debug']) {
+
+		//При отладки слать можно подряд письма
+		if (!infra_debug()) {
 			if ($ans['time'] && $ans['time'] + 5 * 60 > $time) {
 				return infra_err($ans, 'Follow-up letter can be sent in 5 minutes.');
 			}
@@ -149,7 +152,7 @@ if ($type == 'confirm') {
 		$oldtime = infra_session_get('safe.confirmtime');
 		$time = time();
 		$conf = infra_config();
-		if (!$conf['debug']) {
+		if (!infra_debug()) {
 			if ($oldtime && $oldtime + 5 * 60 > $time) {
 				return infra_err($ans, 'Follow-up letter can be sent in 5 minutes.');
 			}
