@@ -58,7 +58,7 @@ if ($type == 'signup') {
 		infra_view_setCookie(infra_session_getName('pass'), md5($password));
 		$ans['go'] = '?user';
 		infra_session_set('safe.confirmtime', time());
-		$msg = user_sentEmail($email, 'signup', $data);
+		$msg = User::sentEmail($email, 'signup', $data);
 		if (is_string($msg)) {
 			return infra_err($ans, $msg);
 		}
@@ -96,7 +96,7 @@ if ($type == 'remindkey') {
 		infra_session_setPass(md5($email.$password), $userData['session_id']);
 		infra_session_change($userData['session_id']);
 
-		$msg = user_sentEmail($email, 'newpass');
+		$msg = User::sentEmail($email, 'newpass');
 		$ans['go'] = '?user';
 		$ans['popup'] = true;
 		//Если popup true значит сообщение нужно дополнительно вывести во всплывающем окне'
@@ -132,7 +132,7 @@ if ($type == 'remind') {
 			return infra_err($ans, 'Email has not been registered yet.');
 		}
 		$data['key'] = md5($user['password'].date('Y.m.j'));//Пароль для востановления действует только сегодня и после смены пароля действовать перестанет
-		$msg = user_sentEmail($email, 'remind', $data);
+		$msg = User::sentEmail($email, 'remind', $data);
 		if (is_string($msg)) {
 			return infra_err($ans, $msg);
 		}
@@ -166,7 +166,7 @@ if ($type == 'confirm') {
 
 		infra_session_set('safe.confirmtime', $time);
 
-		$msg = user_sentEmail($myemail, 'confirm', $data);
+		$msg = User::sentEmail($myemail, 'confirm', $data);
 		if (is_string($msg)) {
 			return infra_err($ans, $msg);
 		}
@@ -229,7 +229,7 @@ if ($type == 'change') {
 
 		infra_session_setPass($newpas);
 		infra_view_setCookie(infra_session_getName('pass'), md5($newpas));
-		$msg = user_sentEmail($email, 'newpass');
+		$msg = User::sentEmail($email, 'newpass');
 
 		return infra_ret($ans, 'Password changed.');
 	}

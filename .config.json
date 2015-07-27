@@ -1,6 +1,8 @@
 {
     "user":{
+    	"pub":["terms"],
     	"sentEmail":"itlife\\user\\User::mail",
-        "admins":[]
+        "admins":[],
+        "terms":"?terms"
     }
 }

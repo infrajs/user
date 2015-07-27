@@ -1,6 +1,6 @@
 window.user={
 	get:function(){
-		var json='*user/rest.php';
+		var json='*user/get.php';
 		infrajs.global.unload('user',json)
 		return infra.loadJSON(json);
 	},

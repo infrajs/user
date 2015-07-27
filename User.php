@@ -2,7 +2,6 @@
 namespace itlife\user;
 
 infra_require('*session/session.php');
-
 class User
 {
 	public static function isAdmin()
@@ -16,19 +15,19 @@ class User
 			return false;
 		}
 		$conf = infra_config();
-
+		infra_cache_no();
 		return in_array($email, $conf['user']['admins']);
 	}
 	public static function get()
 	{
-		$json = '*user/user.php';
+		$json = '*user/get.php';
 		$user = infra_loadJSON($json);
 
 		return $user;
 	}
 	public static function sentEmail($email, $tpl, $data)
 	{
-		$conf=infra_conf();
+		$conf=infra_config();
 		call_user_func($conf['user']['sentEmail'], $email, $tpl, $data);
 	}
 	public static function getEmail()

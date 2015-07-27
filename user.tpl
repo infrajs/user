@@ -161,7 +161,7 @@
 		<div class="control-group">
 			<div class="checkbox">
 				<label>
-					<input name="terms" autosave="0" type="checkbox">I have read and agree to the <a href="?terms">terms of service</a>
+					<input name="terms" autosave="0" type="checkbox">I have read and agree to the <a href="{infra.conf.user.terms}">terms of service</a>
 				</label>
 			</div>
         </div>
@@ -176,7 +176,7 @@
 {form:}
 <div class="row">
 			<div class="col-md-6">
-	<form class="form-horizontal" action="?*user/rest.php?type={tplroot}&submit=1" method="POST">		
+	<form class="form-horizontal" action="?*user/get.php?type={tplroot}&submit=1" method="POST">		
 		{/form:}
 <div>
 	{config.ans.msg:alert}
