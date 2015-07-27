@@ -25,7 +25,7 @@ class User
 
 		return $user;
 	}
-	public static function sentEmail($email, $tpl, $data)
+	public static function sentEmail($email, $tpl, $data = array())
 	{
 		$conf=infra_config();
 		call_user_func($conf['user']['sentEmail'], $email, $tpl, $data);
