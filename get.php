@@ -131,7 +131,9 @@ if ($type == 'remind') {
 		if (!$user['session_id']) {
 			return infra_err($ans, 'Email has not been registered yet.');
 		}
+		$data=array();
 		$data['key'] = md5($user['password'].date('Y.m.j'));//Пароль для востановления действует только сегодня и после смены пароля действовать перестанет
+
 		$msg = User::sentEmail($email, 'remind', $data);
 		if (is_string($msg)) {
 			return infra_err($ans, $msg);
