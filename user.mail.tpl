@@ -1,3 +1,12 @@
+{test-subject:}Test letter
+{test:} Hi! It's a test letter. Enjoy!
+
+host: {host}
+path: {path}
+email: {email}
+time: {time}
+site: {site}
+
 {signup-subject:}Confirm Your WebInpaint Account
 {signup:}Hi!
 Before we can give you access to all of WebInpaint's features, please confirm your WebInpaint account by clicking the link below.

@@ -201,7 +201,7 @@ if ($type == 'confirmkey') {
 		return infra_err($ans, 'Link outdated.');
 	}
 	infra_session_setVerify();
-
+	User::sentEmail($myemail, 'welcome');
 	return infra_ret($ans, 'All done. Address verified.');
 }
 if ($type == 'change') {
@@ -233,7 +233,7 @@ if ($type == 'change') {
 
 		infra_session_setPass($newpas);
 		infra_view_setCookie(infra_session_getName('pass'), md5($newpas));
-		$msg = User::sentEmail($email, 'newpass');
+		$msg = User::sentEmail($myemail, 'newpass');
 
 		return infra_ret($ans, 'Password changed.');
 	}
