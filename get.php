@@ -8,7 +8,8 @@ $submit = !empty($_GET['submit']);
 $type = (string) @$_GET['type'];
 $ans['id'] = infra_session_initId();
 
-$ans['admin'] = User::isAdmin();
+$ans['is'] = User::is();
+$ans['admin'] = User::is('admin');
 
 $myemail = infra_session_getEmail();
 $ans['email'] = $myemail;

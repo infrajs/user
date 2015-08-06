@@ -4,7 +4,7 @@ namespace itlife\user;
 infra_require('*session/session.php');
 class User
 {
-	public static function isAdmin()
+	public static function is($group = false)
 	{
 		$email = infra_session_getEmail();
 		if (!$email) {
@@ -16,7 +16,17 @@ class User
 		}
 		$conf = infra_config();
 		infra_cache_no();
-		return in_array($email, $conf['user']['admins']);
+		if (!$group) {
+			return true;
+		}
+		if (empty($conf['user'][$group])) {
+			return false;
+		}
+		return in_array($email, $conf['user'][$group]);
+	}
+	public static function isAdmin()
+	{
+		return self::is('admin');
 	}
 	public static function get()
 	{

@@ -1,4 +1,8 @@
 window.user={
+	is:function(){
+		var user=this.get();
+		return user.is;
+	},
 	get:function(){
 		var json='*user/get.php';
 		infrajs.global.unload('user',json)
