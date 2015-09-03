@@ -10,7 +10,7 @@ $ans=array();
 
 
 $data=User::get();
-if (!$data || sizeof($data) != 4 || !$data['result'] || !$data['id']) {
+if (!$data || sizeof($data) != 5 || !$data['result'] || !$data['id']) {
 	return Ans::err($ans, 'User data get error');
 }
 

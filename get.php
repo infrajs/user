@@ -116,10 +116,9 @@ if ($type == 'remind') {
 		$time = time();
 
 		//При отладки слать можно подряд письма
-		if (!infra_debug()) {
-			if ($ans['time'] && $ans['time'] + 5 * 60 > $time) {
-				return infra_err($ans, 'Follow-up letter can be sent in 5 minutes.');
-			}
+	
+		if ($ans['time'] && $ans['time'] + 5 * 60 > $time) {
+			return infra_err($ans, 'Follow-up letter can be sent in 5 minutes.');
 		}
 		$email = trim(strip_tags($_POST['email']));
 
@@ -157,11 +156,11 @@ if ($type == 'confirm') {
 		$oldtime = infra_session_get('safe.confirmtime');
 		$time = time();
 		$conf = infra_config();
-		if (!infra_debug()) {
-			if ($oldtime && $oldtime + 5 * 60 > $time) {
-				return infra_err($ans, 'Follow-up letter can be sent in 5 minutes.');
-			}
+		
+		if ($oldtime && $oldtime + 5 * 60 > $time) {
+			return infra_err($ans, 'Follow-up letter can be sent in 5 minutes.');
 		}
+		
 
 		$user = infra_session_getUser();
 		if (!$user['email']) {
