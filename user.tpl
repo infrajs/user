@@ -17,7 +17,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			{data.email?:userauth?:userguest}
-			
+
 		</div>
 	</div>
 	{userguest:}
@@ -101,13 +101,13 @@
 	{confirmbody:}
 	{:form}
 		{data.time?:alreadysent?:firstsent}
-		
+
 		<div class="control-group" style="margin-top:20px">
 			<button class="btn btn-success">Send a letter to confirm</button>
 		</div>
 	{:/form}
 	{alreadysent:}
-		<p>Еmail was sent on {~date(:r,data.time)}</p>
+		<p>Еmail was sent on {~date(:Y-m-d H:i:s,data.time)}</p>
 	{firstsent:}
 		<p>Will be sent an email with a link to confirm your address.</p>
 {confirmkey:}
@@ -176,13 +176,13 @@
 {form:}
 <div class="row">
 			<div class="col-md-6">
-	<form class="form-horizontal" action="?*user/get.php?type={tplroot}&submit=1" method="POST">		
+	<form class="form-horizontal" action="?*user/get.php?type={tplroot}&submit=1" method="POST">
 		{/form:}
 <div>
 	{config.ans.msg:alert}
 </div>
 	</form>
-	</div> 
+	</div>
 	</div>
 {inp-email:}
 	<div class="control-group">
