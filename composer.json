@@ -1,15 +1,12 @@
 {
-    "name": "itlife/user",
-    "description": "plugin for infrajs",
+    "name": "infrajs/user",
+    "description": "Личный кабинет пользователя",
+    "homepage":"https://github.com/infrajs/user",
     "license": "GPL3",
-    "authors": [{
-        "name": "itlife",
-        "email": "info@itlife-studio.ru"
-    }],
     "autoload": {
-        "psr-4": { "itlife\\user\\": "/" }
+        "psr-4": { "infrajs\\user\\": "/" }
     },
     "require":{
-        "itlife/session":"~1"
+        "infrajs/session":"~1"
     }
 }
