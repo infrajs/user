@@ -1,17 +1,26 @@
 <?php
 
-use itlife\user\User;
+use infrajs\user\User;
+use infrajs\session\Session;
+use infrajs\router\Router;
+use infrajs\view\View;
+use infrajs\ans\Ans;
 
-infra_require('*session/session.php');
+if (!is_file('vendor/autoload.php')) {
+	chdir('../../../');
+	require_once('vendor/autoload.php');
+	Router::init();
+}
+
 $ans = array();
 $submit = !empty($_GET['submit']);
 $type = (string) @$_GET['type'];
-$ans['id'] = infra_session_initId();
+$ans['id'] = Session::initId();
 
 $ans['is'] = User::is();
 $ans['admin'] = User::is('admin');
 
-$myemail = infra_session_getEmail();
+$myemail = Session::getEmail();
 $ans['email'] = $myemail;
 if ($type == 'signup') {
 	if ($myemail) {
@@ -27,7 +36,7 @@ if ($type == 'signup') {
 			return infra_err($ans, 'You must specify a valid email address');
 		}
 
-		$user = infra_session_getUser($email);// еще надо проверить есть ли уже такой емаил
+		$user = Session::getUser($email);// еще надо проверить есть ли уже такой емаил
 		if ($user['session_id']) {
 			return infra_err($ans, 'This email already registered.');
 		}
@@ -42,7 +51,7 @@ if ($type == 'signup') {
 			return infra_err($ans, 'Passwords do not match.');
 		}
 
-		$myemail = infra_session_getEmail();
+		$myemail = Session::getEmail();
 		if ($myemail) {
 			return infra_err($ans, 'You are already logged in');
 		}//Значит пользователь не зарегистрирован
@@ -56,11 +65,11 @@ if ($type == 'signup') {
 		$password = md5($email.$password);
 		$data = array();
 		$data['key'] = md5($password.date('Y.m.j'));
-		infra_session_setEmail($email);
-		infra_session_setPass($password);
-		infra_view_setCookie(infra_session_getName('pass'), md5($password));
+		Session::setEmail($email);
+		Session::setPass($password);
+		View::setCookie(Session::getName('pass'), md5($password));
 		$ans['go'] = '?user';
-		infra_session_set('safe.confirmtime', time());
+		Session::set('safe.confirmtime', time());
 		$msg = User::sentEmail($email, 'signup', $data);
 		if (is_string($msg)) {
 			return infra_err($ans, $msg);
@@ -81,7 +90,7 @@ if ($type == 'remindkey') {
 	if (!User::checkData($email, 'email')) {
 		return infra_err($ans, 'Incorrect link');
 	}
-	$userData = infra_session_getUser($email);
+	$userData = Session::getUser($email);
 	$realkey = md5($userData['password'].date('Y.m.j'));
 	if ($realkey !== $key) {
 		return infra_err($ans, 'Link outdated.');
@@ -96,8 +105,8 @@ if ($type == 'remindkey') {
 			return infra_err($ans, 'Passwords do not match.');
 		}
 
-		infra_session_setPass(md5($email.$password), $userData['session_id']);
-		infra_session_change($userData['session_id']);
+		Session::setPass(md5($email.$password), $userData['session_id']);
+		Session::change($userData['session_id']);
 
 		$msg = User::sentEmail($email, 'newpass');
 		$ans['go'] = '?user';
@@ -111,7 +120,7 @@ if ($type == 'remind') {
 	if ($myemail) {
 		return infra_err($ans, 'You are logged in.');
 	}
-	$ans['time'] = infra_session_get('safe.remindtime');
+	$ans['time'] = Session::get('safe.remindtime');
 	if ($submit) {
 		$time = time();
 
@@ -129,7 +138,7 @@ if ($type == 'remind') {
 			return infra_err($ans, 'You are already logged in.');
 		}
 
-		$user = infra_session_getUser($email);
+		$user = Session::getUser($email);
 		if (!$user['session_id']) {
 			return infra_err($ans, 'Email has not been registered yet.');
 		}
@@ -140,7 +149,7 @@ if ($type == 'remind') {
 		if (is_string($msg)) {
 			return infra_err($ans, $msg);
 		}
-		infra_session_set('safe.remindtime', time());
+		Session::set('safe.remindtime', time());
 
 		return infra_ret($ans, 'We sent you a letter. Follow the instructions in the letter.');
 	}
@@ -151,9 +160,9 @@ if ($type == 'confirm') {
 	if (!$myemail) {
 		return infra_err($ans, 'You are not logged in.');
 	}
-	$ans['time'] = infra_session_get('safe.confirmtime');
+	$ans['time'] = Session::get('safe.confirmtime');
 	if ($submit) {
-		$oldtime = infra_session_get('safe.confirmtime');
+		$oldtime = Session::get('safe.confirmtime');
 		$time = time();
 		$conf = infra_config();
 		
@@ -162,13 +171,13 @@ if ($type == 'confirm') {
 		}
 		
 
-		$user = infra_session_getUser();
+		$user = Session::getUser();
 		if (!$user['email']) {
 			return infra_err($ans, 'Email has not been registered yet.');
 		}
 		$data['key'] = md5($user['password'].date('Y.m.j'));
 
-		infra_session_set('safe.confirmtime', $time);
+		Session::set('safe.confirmtime', $time);
 
 		$msg = User::sentEmail($myemail, 'confirm', $data);
 		if (is_string($msg)) {
@@ -182,7 +191,7 @@ if ($type == 'confirmkey') {
 	if (!$myemail) {
 		return infra_err($ans, 'You are not logged in.');
 	}
-	$verify = infra_session_getVerify();
+	$verify = Session::getVerify();
 	if ($verify) {
 		return infra_ret($ans, 'Address already verified.');
 	}
@@ -195,12 +204,12 @@ if ($type == 'confirmkey') {
 		return infra_err($ans, 'Incorrect link');
 	}
 
-	$userData = infra_session_getUser();
+	$userData = Session::getUser();
 	$realkey = md5($userData['password'].date('Y.m.j'));
 	if ($realkey !== $key) {
 		return infra_err($ans, 'Link outdated.');
 	}
-	infra_session_setVerify();
+	Session::setVerify();
 	User::sentEmail($myemail, 'welcome');
 	return infra_ret($ans, 'All done. Address verified.');
 }
@@ -218,7 +227,7 @@ if ($type == 'change') {
 		}
 
 		$oldpas = md5($myemail.$oldpassword);
-		$user = infra_session_getUser();
+		$user = Session::getUser();
 		if ($user['password'] != $oldpas) {
 			return infra_err($ans, 'Invalid current password.');
 		}
@@ -231,8 +240,8 @@ if ($type == 'change') {
 			return infra_err($ans, 'Passwords do not match.');
 		}
 
-		infra_session_setPass($newpas);
-		infra_view_setCookie(infra_session_getName('pass'), md5($newpas));
+		Session::setPass($newpas);
+		View::setCookie(Session::getName('pass'), md5($newpas));
 		$msg = User::sentEmail($myemail, 'newpass');
 
 		return infra_ret($ans, 'Password changed.');
@@ -248,12 +257,12 @@ if ($type == 'signin') {
 			return infra_err($ans, 'You must specify a valid email address.');
 		}
 
-		$userData = infra_session_getUser($email);
+		$userData = Session::getUser($email);
 		$password = trim($_POST['password']);
 		if (md5($email.$password) != $userData['password']) {
 			return infra_err($ans, 'Wrong password or email.');
 		}
-		infra_session_change($userData['session_id']);
+		Session::change($userData['session_id']);
 		$ans['go'] = '?user';
 
 		return infra_ret($ans, 'You are logged in.');
@@ -264,14 +273,14 @@ if ($type == 'logout') {
 		return infra_err($ans, 'You are not logged in.');
 	}
 	if ($submit) {
-		infra_session_logout();
+		Session::logout();
 		$ans['go'] = '?user';
 
 		return infra_ret($ans, 'Your status guest.');
 	}
 }
 if ($type == 'user') {
-	$ans['verify'] = infra_session_getVerify();
+	$ans['verify'] = Session::getVerify();
 }
 
-return infra_ret($ans);
+return Ans::ret($ans);

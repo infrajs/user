@@ -1,7 +1,7 @@
 <?php
-namespace itlife\user;
+namespace infrajs\user;
+use infrajs\session\Session;
 
-infra_require('*session/session.php');
 class User
 {
 	public static function is($group = false)
