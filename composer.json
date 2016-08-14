@@ -7,6 +7,11 @@
         "psr-4": { "infrajs\\user\\": "/" }
     },
     "require":{
-        "infrajs/session":"~1"
+        "infrajs/nostore":"~1",
+        "infrajs/session":"~1",
+        "infrajs/session":"~1",
+        "infrajs/router":"~1",
+        "infrajs/view":"~1",
+        "infrajs/ans":"~1"
     }
 }

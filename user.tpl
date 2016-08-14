@@ -3,7 +3,7 @@
 	<div id="userbody"></div>
 {breadcrumbs:}
 	<ol class="breadcrumb">
-	  <li><a href="?">Home</a></li>
+	  <li><a href="/">Home</a></li>
 	  {crumb.child?:blong?:bshort}
 	</ol>
 	{bshort:}
@@ -28,9 +28,9 @@
 			After registration you will have access to more features, you will also be able to choose a suitable package.
 		</p>
 		<p>
-			<a href="?user/signup">{infrajs.unicks.user.childs.signup.title}</a>,
-			<a href="?user/signin">{infrajs.unicks.user.childs.signin.title}</a>,
-			<a href="?user/remind">{infrajs.unicks.user.childs.remind.title}</a>
+			<a href="/user/signup">{Controller.ids.user.childs.signup.title}</a>,
+			<a href="/user/signin">{Controller.ids.user.childs.signin.title}</a>,
+			<a href="/user/remind">{Controller.ids.user.childs.remind.title}</a>
 		</p>
 	{userauth:}
 		<p>
@@ -38,12 +38,12 @@
 		</p>
 		{data.verify?:verified?:notverified}
 		<p>
-			<a href="?user/change">{infrajs.unicks.user.childs.change.title}</a>,
-			<a href="?user/logout">{infrajs.unicks.user.childs.logout.title}</a>
+			<a href="/user/change">{Controller.ids.user.childs.change.title}</a>,
+			<a href="/user/logout">{Controller.ids.user.childs.logout.title}</a>
 		</p>
 		{notverified:}
 			<p>
-				Your email has not been confirmed! <a href="?{crumb}/confirm">Confirm</a>.
+				Your email has not been confirmed! <a href="/{crumb}/confirm">Confirm</a>.
 			</p>
 		{verified:}
 			<p>
@@ -55,7 +55,7 @@
 	{strlogout:}logout
 	{strchange:}change
 	{struser:}user
-	{blink:}<li><a href="?user/{~key}">{title}</a></li>
+	{blink:}<li><a href="/user/{~key}">{title}</a></li>
 {remind:}
 	{:hat}
 	{remindbody:}
@@ -67,8 +67,8 @@
 				<div class="controls">
 					<button class="btn btn-success">Remind</button>
 					<span style="margin-left:10px">
-						<a href="?user/signup">{infrajs.unicks.user.childs.signup.title}</a>,
-						<a href="?user/signin">{infrajs.unicks.user.childs.signin.title}</a>
+						<a href="/user/signup">{Controller.ids.user.childs.signup.title}</a>,
+						<a href="/user/signin">{Controller.ids.user.childs.signin.title}</a>
 					</span>
 				</div>
 			</div>
@@ -144,8 +144,8 @@
 			<div class="controls">
 				<button class="btn btn-success">Sign In</button>
 				<span style="margin-left:10px">
-					<a href="?user/signup">{infrajs.unicks.user.childs.signup.title}</a>,
-					<a href="?user/remind">{infrajs.unicks.user.childs.remind.title}</a>
+					<a href="/user/signup">{Controller.ids.user.childs.signup.title}</a>,
+					<a href="/user/remind">{Controller.ids.user.childs.remind.title}</a>
 				</span>
 			</div>
 		</div>
@@ -168,15 +168,15 @@
 		<div class="control-group" style="margin-top:20px">
 			<button class="btn btn-success">Sign Up</button>
 			<span style="margin-left:10px">
-				<a href="?user/signin">{unicks.user.childs.signin.title}</a>,
-				<a href="?user/remind">{unicks.user.childs.remind.title}</a>
+				<a href="/user/signin">{unicks.user.childs.signin.title}</a>,
+				<a href="/user/remind">{unicks.user.childs.remind.title}</a>
 			</span>
 		</div>
 	{:/form}
 {form:}
 <div class="row">
 			<div class="col-md-6">
-	<form class="form-horizontal" action="?*user/get.php?type={tplroot}&submit=1" method="POST">
+	<form class="form-horizontal" action="/-user/get.php?type={tplroot}&submit=1" method="POST">
 		{/form:}
 <div>
 	{config.ans.msg:alert}

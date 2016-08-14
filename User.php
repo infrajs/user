@@ -1,25 +1,25 @@
 <?php
 namespace infrajs\user;
 use infrajs\session\Session;
-
+use infrajs\nostore\Nostore;
 class User
 {
 	public static function is($group = false)
 	{
-		$email = infra_session_getEmail();
+		$email = Session::getEmail();
 		if (!$email) {
 			return false;
 		}
-		$verify = infra_session_getVerify();
+		$verify = Session::getVerify();
 		if (!$verify) {
 			return false;
 		}
-		$conf = infra_config();
-		infra_cache_no();
+		$conf = Config::get('user');
+		Nostore::on();
 		if (!$group) {
 			return true;
 		}
-		if (empty($conf['user'][$group])) {
+		if (empty($conf[$group])) {
 			return false;
 		}
 		return in_array($email, $conf['user'][$group]);
@@ -42,7 +42,7 @@ class User
 	}
 	public static function getEmail()
 	{
-		return infra_session_getEmail();
+		return Session::getEmail();
 	}
 	public static function checkData($str, $type = 'value')
 	{

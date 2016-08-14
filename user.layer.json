@@ -18,7 +18,7 @@
 			"tplroot":"user",
 			"showanimate":true,
 			"global":"user",
-			"unick":"user",
+			"id":"user",
 			"unicklayer":"user",
 			"unicklayertochild":true,
 			"childs":{
