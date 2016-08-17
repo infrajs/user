@@ -9,8 +9,8 @@
 	{bshort:}
 		<li class="active">User {data.email}</li>
 	{blong:}
-		<li><a href="?user">User {data.email}</a></li>
-		<li class="active">{parent.divs.userbody.0.childs[crumb.child.name].title}</li>
+		<li><a href="/user">User {data.email}</a></li>
+		<li class="active">{Controller.ids.user.childs[crumb.child.name].title}</li>
 {user:}
 	{:hat}
 	{userbody:}
@@ -161,28 +161,32 @@
 		<div class="control-group">
 			<div class="checkbox">
 				<label>
-					<input name="terms" autosave="0" type="checkbox">I have read and agree to the <a href="{infra.conf.user.terms}">terms of service</a>
+					<input name="terms" autosave="0" type="checkbox">I have read and agree to the <a href="{Config.get(:struser).terms}">terms of service</a>
 				</label>
 			</div>
-        </div>
+	    </div>
 		<div class="control-group" style="margin-top:20px">
 			<button class="btn btn-success">Sign Up</button>
 			<span style="margin-left:10px">
-				<a href="/user/signin">{unicks.user.childs.signin.title}</a>,
-				<a href="/user/remind">{unicks.user.childs.remind.title}</a>
+				<a href="/user/signin">{Controller.ids.user.childs.signin.title}</a>,
+				<a href="/user/remind">{Controller.ids.user.childs.remind.title}</a>
 			</span>
 		</div>
 	{:/form}
+	{struser:}user
 {form:}
-<div class="row">
-			<div class="col-md-6">
-	<form class="form-horizontal" action="/-user/get.php?type={tplroot}&submit=1" method="POST">
-		{/form:}
-<div>
-	{config.ans.msg:alert}
-</div>
-	</form>
-	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div>
+				{config.ans.msg:alert}
+			</div>
+			<form class="form-horizontal" action="/-user/get.php?type={tplroot}&submit=1" method="POST">
+	{/form:}
+				<div>
+					{config.ans.msg:alert}
+				</div>
+			</form>
+		</div>
 	</div>
 {inp-email:}
 	<div class="control-group">
@@ -233,6 +237,6 @@
 		</div>
 	</div>
 {alert:}
-	<div style="margin-top:20px" class="alert alert-{..result?:success?:danger}">
+	<div style="margin-top:20px; padding:5px" class="alert alert-{..result?:success?:danger}">
 		{.}
 	</div>

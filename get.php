@@ -5,6 +5,7 @@ use infrajs\session\Session;
 use infrajs\router\Router;
 use infrajs\view\View;
 use infrajs\ans\Ans;
+use infrajs\config\Config;
 
 if (!is_file('vendor/autoload.php')) {
 	chdir('../../../');
@@ -24,42 +25,42 @@ $myemail = Session::getEmail();
 $ans['email'] = $myemail;
 if ($type == 'signup') {
 	if ($myemail) {
-		return infra_err($ans, 'You are logged in.');
+		return Ans::err($ans, 'You are logged in.');
 	}
 	if ($submit) {
 		if (!$ans['id']) {
-			return infra_err($ans, 'The error on the server. Session is not initialized, try again later.');
+			return Ans::err($ans, 'The error on the server. Session is not initialized, try again later.');
 		}
 
 		$email = trim(strip_tags($_POST['email']));
 		if (!User::checkData($email, 'email')) {
-			return infra_err($ans, 'You must specify a valid email address');
+			return Ans::err($ans, 'You must specify a valid email address');
 		}
 
 		$user = Session::getUser($email);// еще надо проверить есть ли уже такой емаил
 		if ($user['session_id']) {
-			return infra_err($ans, 'This email already registered.');
+			return Ans::err($ans, 'This email already registered.');
 		}
 
 		$password = trim($_POST['password']);
 		if (!User::checkData($password, 'password')) {
-			return infra_err($ans, 'You must specify a valid password');
+			return Ans::err($ans, 'You must specify a valid password');
 		}
 
 		$repeatpassword = trim($_POST['repeatpassword']);
 		if ($password != $repeatpassword) {
-			return infra_err($ans, 'Passwords do not match.');
+			return Ans::err($ans, 'Passwords do not match.');
 		}
 
 		$myemail = Session::getEmail();
 		if ($myemail) {
-			return infra_err($ans, 'You are already logged in');
+			return Ans::err($ans, 'You are already logged in');
 		}//Значит пользователь не зарегистрирован
 
 
 		$term = trim($_POST['terms']);
 		if (!$term) {
-			return infra_err($ans, 'You need to accept the terms of service.');
+			return Ans::err($ans, 'You need to accept the terms of service.');
 		}
 
 		$password = md5($email.$password);
@@ -68,57 +69,57 @@ if ($type == 'signup') {
 		Session::setEmail($email);
 		Session::setPass($password);
 		View::setCookie(Session::getName('pass'), md5($password));
-		$ans['go'] = '?user';
+		$ans['go'] = '/user';
 		Session::set('safe.confirmtime', time());
 		$msg = User::sentEmail($email, 'signup', $data);
 		if (is_string($msg)) {
-			return infra_err($ans, $msg);
+			return Ans::err($ans, $msg);
 		}
 
-		return infra_ret($ans, 'You have successfully registered. We sent you a letter.');
+		return Ans::ret($ans, 'You have successfully registered. We sent you a letter.');
 	}
 }
 if ($type == 'remindkey') {
 	if ($myemail) {
-		return infra_err($ans, 'You are already logged in.');
+		return Ans::err($ans, 'You are already logged in.');
 	}
 	$key = $_REQUEST['key'];
 	if (!$key) {
-		return infra_err($ans, 'Incorrect link');
+		return Ans::err($ans, 'Incorrect link');
 	}
 	$email = trim(strip_tags($_REQUEST['email']));
 	if (!User::checkData($email, 'email')) {
-		return infra_err($ans, 'Incorrect link');
+		return Ans::err($ans, 'Incorrect link');
 	}
 	$userData = Session::getUser($email);
 	$realkey = md5($userData['password'].date('Y.m.j'));
 	if ($realkey !== $key) {
-		return infra_err($ans, 'Link outdated.');
+		return Ans::err($ans, 'Link outdated.');
 	}
 	if ($submit) {
 		$password = trim($_POST['password']);
 		if (!User::checkData($password, 'password')) {
-			return infra_err($ans, 'You must specify a valid password');
+			return Ans::err($ans, 'You must specify a valid password');
 		}
 		$repeatpassword = trim($_POST['repeatpassword']);
 		if ($password != $repeatpassword) {
-			return infra_err($ans, 'Passwords do not match.');
+			return Ans::err($ans, 'Passwords do not match.');
 		}
 
 		Session::setPass(md5($email.$password), $userData['session_id']);
 		Session::change($userData['session_id']);
 
 		$msg = User::sentEmail($email, 'newpass');
-		$ans['go'] = '?user';
+		$ans['go'] = '/user';
 		$ans['popup'] = true;
 		//Если popup true значит сообщение нужно дополнительно вывести во всплывающем окне'
 		//Окно success требуется
-		return infra_ret($ans, 'Password changed. You are logged in.');
+		return Ans::ret($ans, 'Password changed. You are logged in.');
 	}
 }
 if ($type == 'remind') {
 	if ($myemail) {
-		return infra_err($ans, 'You are logged in.');
+		return Ans::err($ans, 'You are logged in.');
 	}
 	$ans['time'] = Session::get('safe.remindtime');
 	if ($submit) {
@@ -127,95 +128,96 @@ if ($type == 'remind') {
 		//При отладки слать можно подряд письма
 	
 		if ($ans['time'] && $ans['time'] + 5 * 60 > $time) {
-			return infra_err($ans, 'Follow-up letter can be sent in 5 minutes.');
+			return Ans::err($ans, 'Follow-up letter can be sent in 5 minutes.');
 		}
 		$email = trim(strip_tags($_POST['email']));
 
 		if (!User::checkData($email, 'email')) {
-			return infra_err($ans, 'You must specify a valid email address.');
+			return Ans::err($ans, 'You must specify a valid email address.');
 		}
 		if ($myemail) {
-			return infra_err($ans, 'You are already logged in.');
+			return Ans::err($ans, 'You are already logged in.');
 		}
 
 		$user = Session::getUser($email);
 		if (!$user['session_id']) {
-			return infra_err($ans, 'Email has not been registered yet.');
+			return Ans::err($ans, 'Email has not been registered yet.');
 		}
 		$data=array();
 		$data['key'] = md5($user['password'].date('Y.m.j'));//Пароль для востановления действует только сегодня и после смены пароля действовать перестанет
 
 		$msg = User::sentEmail($email, 'remind', $data);
 		if (is_string($msg)) {
-			return infra_err($ans, $msg);
+			return Ans::err($ans, $msg);
 		}
 		Session::set('safe.remindtime', time());
 
-		return infra_ret($ans, 'We sent you a letter. Follow the instructions in the letter.');
+		return Ans::ret($ans, 'We sent you a letter. Follow the instructions in the letter.');
 	}
 
-	return infra_ret($ans);
+	return Ans::ret($ans);
 }
 if ($type == 'confirm') {
-	if (!$myemail) {
-		return infra_err($ans, 'You are not logged in.');
-	}
+	if (!$myemail) return Ans::err($ans, 'You are not logged in.');
 	$ans['time'] = Session::get('safe.confirmtime');
+	
 	if ($submit) {
 		$oldtime = Session::get('safe.confirmtime');
+
 		$time = time();
-		$conf = infra_config();
 		
 		if ($oldtime && $oldtime + 5 * 60 > $time) {
-			return infra_err($ans, 'Follow-up letter can be sent in 5 minutes.');
+			//return Ans::err($ans, 'Follow-up letter can be sent in 5 minutes.');
 		}
 		
 
 		$user = Session::getUser();
-		if (!$user['email']) {
-			return infra_err($ans, 'Email has not been registered yet.');
-		}
+		if (!$user['email']) return Ans::err($ans, 'Email has not been registered yet.');
+
 		$data['key'] = md5($user['password'].date('Y.m.j'));
 
 		Session::set('safe.confirmtime', $time);
+		echo $time;
+		exit;
+		
 
 		$msg = User::sentEmail($myemail, 'confirm', $data);
 		if (is_string($msg)) {
-			return infra_err($ans, $msg);
+			return Ans::err($ans, $msg);
 		}
 
-		return infra_ret($ans, 'We sent you a letter. Follow the instructions in the letter.');
+		return Ans::ret($ans, 'We sent you a letter. Follow the instructions in the letter.');
 	}
 }
 if ($type == 'confirmkey') {
 	if (!$myemail) {
-		return infra_err($ans, 'You are not logged in.');
+		return Ans::err($ans, 'You are not logged in.');
 	}
 	$verify = Session::getVerify();
 	if ($verify) {
-		return infra_ret($ans, 'Address already verified.');
+		return Ans::ret($ans, 'Address already verified.');
 	}
 	$key = $_REQUEST['key'];
 	if (!$key) {
-		return infra_err($ans, 'Incorrect link');
+		return Ans::err($ans, 'Incorrect link');
 	}
 	$email = trim(strip_tags($_REQUEST['email']));
 	if (!User::checkData($email, 'email')) {
-		return infra_err($ans, 'Incorrect link');
+		return Ans::err($ans, 'Incorrect link');
 	}
 
 	$userData = Session::getUser();
 	$realkey = md5($userData['password'].date('Y.m.j'));
 	if ($realkey !== $key) {
-		return infra_err($ans, 'Link outdated.');
+		return Ans::err($ans, 'Link outdated.');
 	}
 	Session::setVerify();
 	User::sentEmail($myemail, 'welcome');
-	return infra_ret($ans, 'All done. Address verified.');
+	return Ans::ret($ans, 'All done. Address verified.');
 }
 if ($type == 'change') {
 	if (!$myemail) {
-		return infra_err($ans, 'You are not logged in.');
+		return Ans::err($ans, 'You are not logged in.');
 	}
 	if ($submit) {
 		$oldpassword = trim($_POST['oldpassword']);
@@ -223,60 +225,60 @@ if ($type == 'change') {
 		$repeatnewpassword = trim($_POST['repeatnewpassword']);
 
 		if (!User::checkData($oldpassword, 'password')) {
-			return infra_err($ans, 'You must specify a valid old password.');
+			return Ans::err($ans, 'You must specify a valid old password.');
 		}
 
 		$oldpas = md5($myemail.$oldpassword);
 		$user = Session::getUser();
 		if ($user['password'] != $oldpas) {
-			return infra_err($ans, 'Invalid current password.');
+			return Ans::err($ans, 'Invalid current password.');
 		}
 
 		if (!User::checkData($newpassword, 'password')) {
-			return infra_err($ans, 'You must specify a valid new password.');
+			return Ans::err($ans, 'You must specify a valid new password.');
 		}
 		$newpas = md5($myemail.$newpassword);
 		if ($newpassword != $repeatnewpassword) {
-			return infra_err($ans, 'Passwords do not match.');
+			return Ans::err($ans, 'Passwords do not match.');
 		}
 
 		Session::setPass($newpas);
 		View::setCookie(Session::getName('pass'), md5($newpas));
 		$msg = User::sentEmail($myemail, 'newpass');
 
-		return infra_ret($ans, 'Password changed.');
+		return Ans::ret($ans, 'Password changed.');
 	}
 }
 if ($type == 'signin') {
 	if ($myemail) {
-		return infra_err($ans, 'You are already logged in.');
+		return Ans::err($ans, 'You are already logged in.');
 	}
 	if ($submit) {
 		$email = trim(strip_tags($_POST['email']));
 		if (!User::checkData($email, 'email')) {
-			return infra_err($ans, 'You must specify a valid email address.');
+			return Ans::err($ans, 'You must specify a valid email address.');
 		}
 
 		$userData = Session::getUser($email);
 		$password = trim($_POST['password']);
 		if (md5($email.$password) != $userData['password']) {
-			return infra_err($ans, 'Wrong password or email.');
+			return Ans::err($ans, 'Wrong password or email.');
 		}
 		Session::change($userData['session_id']);
-		$ans['go'] = '?user';
+		$ans['go'] = '/user';
 
-		return infra_ret($ans, 'You are logged in.');
+		return Ans::ret($ans, 'You are logged in.');
 	}
 }
 if ($type == 'logout') {
 	if (!$myemail) {
-		return infra_err($ans, 'You are not logged in.');
+		return Ans::err($ans, 'You are not logged in.');
 	}
 	if ($submit) {
 		Session::logout();
-		$ans['go'] = '?user';
+		$ans['go'] = '/user';
 
-		return infra_ret($ans, 'Your status guest.');
+		return Ans::ret($ans, 'Your status guest.');
 	}
 }
 if ($type == 'user') {

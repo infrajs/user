@@ -2,6 +2,11 @@
 namespace infrajs\user;
 use infrajs\session\Session;
 use infrajs\nostore\Nostore;
+use infrajs\config\Config;
+use infrajs\view\View;
+use infrajs\template\Template;
+use infrajs\mail\Mail;
+
 class User
 {
 	public static function is($group = false)
@@ -30,15 +35,15 @@ class User
 	}
 	public static function get()
 	{
-		$json = '*user/get.php';
+		$json = '-user/get.php';
 		$user = infra_loadJSON($json);
 
 		return $user;
 	}
 	public static function sentEmail($email, $tpl, $data = array())
 	{
-		$conf=infra_config();
-		call_user_func($conf['user']['sentEmail'], $email, $tpl, $data);
+		$conf = Config::get('user');
+		call_user_func($conf['sentEmail'], $email, $tpl, $data);
 	}
 	public static function getEmail()
 	{
@@ -65,17 +70,17 @@ class User
 		if (!$mailroot) {
 			return;
 		}//Когда нет указаний в конфиге... ничего такого...
-		$tpl = '*user/user.mail.tpl';
+		$tpl = '-user/user.mail.tpl';
 
-		$data['host'] = infra_view_getHost();
-		$data['path'] = infra_view_getRoot();
+		$data['host'] = View::getHost();
+		$data['path'] = View::getRoot();
 		$data['email'] = $email;
 		$data['time'] = time();
 		$data['site'] = $data['host'].'/'.$data['path'];
 
-		$subject = infra_template_parse($tpl, $data, $mailroot.'-subject');
-		$body = infra_template_parse($tpl, $data, $mailroot);
+		$subject = Template::parse($tpl, $data, $mailroot.'-subject');
+		$body = Template::parse($tpl, $data, $mailroot);
 
-		return infra_mail_fromAdmin($subject, $email, $body);
+		return Mail::fromAdmin($subject, $email, $body);
 	}
 }

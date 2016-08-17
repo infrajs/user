@@ -1,0 +1,6 @@
+{
+	"pub":["terms"],
+	"sentEmail":"infrajs\\user\\User::mail",
+    "admins":[],
+    "terms":"/terms"
+}
