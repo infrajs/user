@@ -5,7 +5,6 @@ host: {host}
 path: {path}
 email: {email}
 time: {time}
-site: {site}
 
 {signup-subject:}Confirm Your {host} Account
 {signup:}Hi!

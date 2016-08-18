@@ -47,6 +47,9 @@ class User
 		$data['path'] = View::getPath();
 		$data['schema'] = View::getSchema();
 		$data['conf'] = $conf;
+		$data['email'] = $email;
+		$data['time'] = time();
+
 		call_user_func($conf['sentEmail'], $email, $tpl, $data);
 	}
 	public static function getEmail()
@@ -75,12 +78,6 @@ class User
 			return;
 		}//Когда нет указаний в конфиге... ничего такого...
 		$tpl = '-user/user.mail.tpl';
-
-		$data['host'] = View::getHost();
-		$data['path'] = View::getRoot();
-		$data['email'] = $email;
-		$data['time'] = time();
-		$data['site'] = $data['host'].'/'.$data['path'];
 
 		$subject = Template::parse($tpl, $data, $mailroot.'-subject');
 		$body = Template::parse($tpl, $data, $mailroot);
