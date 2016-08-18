@@ -52,6 +52,12 @@
 					"onsubmit":true,
 					"global":"user"
 				},
+				"terms":{
+					"seojsontpl":"~seo/{crumb.parent.name}.{crumb.name}.json",
+					"title":"Terms",
+					"tpl":"-user/terms.tpl",
+					"json":"-user/get.php"
+				},
 				"remindkey":{
 					"seojsontpl":"~seo/{crumb.parent.name}.{crumb.name}.json",
 					"title":"Set a new password",
