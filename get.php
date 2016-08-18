@@ -161,11 +161,14 @@ if ($type == 'confirm') {
 	if (!$myemail) return Ans::err($ans, 'You are not logged in.');
 	$ans['time'] = Session::get('safe.confirmtime');
 	
+	$verify = Session::getVerify();
+	if ($verify) {
+		return Ans::ret($ans, 'Address <b>'.$myemail.'</b> already verified.');
+	}
+	
 	if ($submit) {
 		$oldtime = Session::get('safe.confirmtime');
-
 		$time = time();
-		
 		if ($oldtime && $oldtime + 5 * 60 > $time) {
 			return Ans::err($ans, 'Follow-up letter can be sent in 5 minutes.');
 		}

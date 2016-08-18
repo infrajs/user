@@ -130,7 +130,7 @@
 		{:/form}
 {hat:}
 	<h1>{title}</h1>
-	{data.result?:{tplroot}body?data.msg:alert}
+	{data.msg?data.msg:alert?:{tplroot}body}
 {statename:}tplroot
 {signin:}
 	{:hat}
