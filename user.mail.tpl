@@ -28,7 +28,7 @@ If you wish to change your password, click the link below and enter your new pas
 
 If you made this change, then it's all good!
 
-If you didn't make this change, contact support {conf.support} and we'll look into it for you.
+If you didn't make this change, contact support {path}{conf.support} and we'll look into it for you.
 
 {:footer}
 
@@ -49,7 +49,7 @@ Your account: {path}user
 {:footer}
 
 {footer:}Thanks, {host}
-Support: {schema}{host}{conf.support}
+Support: {path}{conf.support}
 
 {conf.twitter:twitter}
 {conf.facebook:facebook}

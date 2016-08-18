@@ -161,7 +161,7 @@
 		<div class="control-group">
 			<div class="checkbox">
 				<label>
-					<input name="terms" autosave="0" type="checkbox">I have read and agree to the <a href="{Config.get(:struser).terms}">terms of service</a>
+					<input name="terms" autosave="0" type="checkbox">I have read and agree to the <a href="{~path(Config.get(:struser).terms)}">terms of service</a>
 				</label>
 			</div>
 	    </div>

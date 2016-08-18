@@ -2,8 +2,8 @@
 	"pub":["terms"],
 	"sentEmail":"infrajs\\user\\User::mail",
     "admins":[],
-    "terms":"/terms",
-    "support":"/contacts",
-    "twiiter":false,
+    "terms":"user/terms",
+    "support":"contacts",
+    "twitter":false,
     "facebook":false
 }
