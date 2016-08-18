@@ -177,9 +177,6 @@
 {form:}
 	<div class="row">
 		<div class="col-md-6">
-			<div>
-				{config.ans.msg:alert}
-			</div>
 			<form class="form-horizontal" action="/-user/get.php?type={tplroot}&submit=1" method="POST">
 	{/form:}
 				<div>
@@ -237,6 +234,6 @@
 		</div>
 	</div>
 {alert:}
-	<div style="margin-top:20px; padding:5px" class="alert alert-{..result?:success?:danger}">
+	<div style="margin-top:20px;" class="alert alert-{..result?:success?:danger}">
 		{.}
 	</div>

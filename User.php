@@ -43,6 +43,9 @@ class User
 	public static function sentEmail($email, $tpl, $data = array())
 	{
 		$conf = Config::get('user');
+		$data['host'] = View::getHost();
+		$data['path'] = View::getPath();
+		$data['conf'] = $conf;
 		call_user_func($conf['sentEmail'], $email, $tpl, $data);
 	}
 	public static function getEmail()
@@ -57,7 +60,7 @@ class User
 			case 'value':
 				return $str && strlen($str) > 1;
 			case 'password':
-				return $str && strlen($str) > 5;
+				return $str && strlen($str) > 1;
 			case 'email':
 				return $str && preg_match('/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/', $str);
 		}

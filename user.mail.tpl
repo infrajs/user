@@ -7,53 +7,49 @@ email: {email}
 time: {time}
 site: {site}
 
-{signup-subject:}Confirm Your WebInpaint Account
+{signup-subject:}Confirm Your {host} Account
 {signup:}Hi!
-Before we can give you access to all of WebInpaint's features, please confirm your WebInpaint account by clicking the link below.
+Before we can give you access to all features, please confirm your account by clicking the link below.
 
-http://{site}?user/confirmkey/{email}/{key}
+{path}/user/confirmkey/{email}/{key}
 
 {:footer}
 
-{remind-subject:}Change password on WebInpaint account
+{remind-subject:}Change password on {host} account
 {remind:}Hi!
 If you wish to change your password, click the link below and enter your new password.
 
-http://{site}?user/remindkey/{email}/{key}
+{path}/user/remindkey/{email}/{key}
 
 {:footer}
 
-{newpass-subject:}Your WebInpaint password has been changed
-{newpass:}The password for your WebInpaint account — {email} — was changed today.
+{newpass-subject:}Your {host} password has been changed
+{newpass:}The password for your account — {email} — was changed today.
 
 If you made this change, then it's all good!
 
-If you didn't make this change, contact Support( http://www.webinpaint.com/?support ) and we'll look into it for you.
+If you didn't make this change, contact support {conf.support} and we'll look into it for you.
 
 {:footer}
 
-{confirm-subject:}Confirm Your WebInpaint Account
+{confirm-subject:}Confirm Your {host} Account
 {confirm:}Hi!
-To complete your WebInpaint account, you must click the link below and confirm your email address.
+To complete your account, you must click the link below and confirm your email address.
 
-http://{site}?user/confirmkey/{email}/{key}
+{path}/user/confirmkey/{email}/{key}
 
 {:footer}
 
-{welcome-subject:}Welcome to WebInpaint
+{welcome-subject:}Welcome to {host}
 {welcome:}Welcome!
-Thank you for creating an WebInpaint account.
+Thank you for creating an account.
 
-WebInpaint Resources:
-Your account: http://{site}?user
-Choose your plan: http://{site}?user/plan
-Upload your picture: http://{site}?plan/upload
-All your images: http://{site}?plan/images
+Your account: {path}user
 
 {:footer}
 
 {footer:}Thanks,
-WebInpaint http://{site}
+{host} {conf.support}
 
-Follow the Inpaint team on Twitter: https://www.twitter.com/theInpaint
-We're also on Facebook: https://www.facebook.com/Inpaint
+Follow the {host} team on Twitter: {conf.twitter}
+We're also on Facebook: {conf.facebook}
