@@ -11,7 +11,7 @@ site: {site}
 {signup:}Hi!
 Before we can give you access to all features, please confirm your account by clicking the link below.
 
-{path}/user/confirmkey/{email}/{key}
+{path}user/confirmkey/{email}/{key}
 
 {:footer}
 
@@ -19,7 +19,7 @@ Before we can give you access to all features, please confirm your account by cl
 {remind:}Hi!
 If you wish to change your password, click the link below and enter your new password.
 
-{path}/user/remindkey/{email}/{key}
+{path}user/remindkey/{email}/{key}
 
 {:footer}
 
@@ -36,7 +36,7 @@ If you didn't make this change, contact support {conf.support} and we'll look in
 {confirm:}Hi!
 To complete your account, you must click the link below and confirm your email address.
 
-{path}/user/confirmkey/{email}/{key}
+{path}user/confirmkey/{email}/{key}
 
 {:footer}
 
