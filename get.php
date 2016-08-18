@@ -167,7 +167,7 @@ if ($type == 'confirm') {
 		$time = time();
 		
 		if ($oldtime && $oldtime + 5 * 60 > $time) {
-			//return Ans::err($ans, 'Follow-up letter can be sent in 5 minutes.');
+			return Ans::err($ans, 'Follow-up letter can be sent in 5 minutes.');
 		}
 		
 
@@ -177,9 +177,6 @@ if ($type == 'confirm') {
 		$data['key'] = md5($user['password'].date('Y.m.j'));
 
 		Session::set('safe.confirmtime', $time);
-		echo $time;
-		exit;
-		
 
 		$msg = User::sentEmail($myemail, 'confirm', $data);
 		if (is_string($msg)) {
