@@ -45,6 +45,7 @@ class User
 		$conf = Config::get('user');
 		$data['host'] = View::getHost();
 		$data['path'] = View::getPath();
+		$data['schema'] = View::getSchema();
 		$data['conf'] = $conf;
 		call_user_func($conf['sentEmail'], $email, $tpl, $data);
 	}

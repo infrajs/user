@@ -48,8 +48,11 @@ Your account: {path}user
 
 {:footer}
 
-{footer:}Thanks,
-{host} {conf.support}
+{footer:}Thanks, {host}
+Support: {schema}{host}{conf.support}
 
-Follow the {host} team on Twitter: {conf.twitter}
-We're also on Facebook: {conf.facebook}
+{conf.twitter:twitter}
+{conf.facebook:facebook}
+
+{twitter:}Follow the {host} team on Twitter: {.}
+{facebook:}We're also on Facebook: {.}
