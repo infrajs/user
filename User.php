@@ -4,6 +4,7 @@ use infrajs\session\Session;
 use infrajs\nostore\Nostore;
 use infrajs\config\Config;
 use infrajs\view\View;
+use infrajs\load\Load;
 use infrajs\template\Template;
 use infrajs\mail\Mail;
 
@@ -36,7 +37,7 @@ class User
 	public static function get()
 	{
 		$json = '-user/get.php';
-		$user = infra_loadJSON($json);
+		$user = Load::loadJSON($json);
 
 		return $user;
 	}
