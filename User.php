@@ -13,21 +13,17 @@ class User
 	public static function is($group = false)
 	{
 		$email = Session::getEmail();
-		if (!$email) {
-			return false;
-		}
+		if (!$email) return false;
+
 		$verify = Session::getVerify();
-		if (!$verify) {
-			return false;
-		}
+		if (!$verify) return false;
+
 		$conf = Config::get('user');
 		Nostore::on();
-		if (!$group) {
-			return true;
-		}
-		if (empty($conf[$group])) {
-			return false;
-		}
+		if (!$group) return true;
+		
+		if (empty($conf[$group])) return false;
+
 		return in_array($email, $conf['user'][$group]);
 	}
 	public static function isAdmin()
@@ -72,17 +68,36 @@ class User
 	}
 	public static function mail($email, $mailroot, $data = array())
 	{
-		if (!$email) {
-			return 'Wrong email.';
-		}
-		if (!$mailroot) {
-			return;
-		}//Когда нет указаний в конфиге... ничего такого...
+		if (!$email) return 'Wrong email.';
+		if (!$mailroot) return;
+		
+		//Когда нет указаний в конфиге... ничего такого...
 		$tpl = '-user/user.mail.tpl';
 
 		$subject = Template::parse($tpl, $data, $mailroot.'-subject');
 		$body = Template::parse($tpl, $data, $mailroot);
 
 		return Mail::fromAdmin($subject, $email, $body);
+	}
+	/**
+	 * Волшебная функция, которая не пропускает дальше незарегистрированного пользователя 
+	 * Исопльзуется в формах где указывается email.
+	 * Требуется выполнить регистрацию если указан email уже существующего пользователя
+	 * Проводит тихую регистрацию если пользователь не зарегистирован и email Не занят
+	 **/
+	public static function checkReg($email, $password = false) { //Сессия остаётся текущей
+		$email = trim(strip_tags($email));
+		if (!User::checkData($email, 'email')) return 'Необходимо указать крректный email';
+		$myemail = Session::getEmail();
+		if (!$myemail) {//Значит пользователь не зарегистрирован
+			$userData = Session::getUser($email);// еще надо проверить есть ли уже такой эмаил
+			if ($userData['session_id']) {
+				return 'На указанный email на сайте есть регистрация, необходимо <a href="/user/signin">авторизоваться</a>';
+			} else {
+				Session::setEmail($email);
+				if ($password) Session::setPass($password);
+				return User::mail($email, 'signup');
+			}
+		}
 	}
 }
