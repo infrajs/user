@@ -16,7 +16,7 @@ if (!is_file('vendor/autoload.php')) {
 $ans = array();
 $submit = !empty($_GET['submit']);
 $type = (string) @$_GET['type'];
-$ans['id'] = Session::initId();
+$ans['id'] = Session::getId();
 
 $ans['is'] = User::is();
 $ans['admin'] = User::is('admin');
@@ -265,6 +265,7 @@ if ($type == 'signin') {
 			return Ans::err($ans, 'Wrong password or email.');
 		}
 		Session::change($userData['session_id']);
+
 		$ans['go'] = '/user';
 
 		return Ans::ret($ans, 'You are logged in.');
