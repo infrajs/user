@@ -17,12 +17,11 @@
 	<div class="row">
 		<div class="col-md-6">
 			{data.email?:userauth?:userguest}
-
 		</div>
 	</div>
 	{userguest:}
 		<p>
-			Welcome to your personal account. At the moment you are unregistered user and functions are available with limitations.
+			{:lang.welcome-guest}
 		</p>
 		<p>
 			After registration you will have access to more features, you will also be able to choose a suitable package.
@@ -129,13 +128,13 @@
 			</div>
 		{:/form}
 {hat:}
-	<h1>{title}</h1>
+	<h1>{~lang(:struser,title)}</h1>
 	{data.msg?data.msg:alert?:{tplroot}body}
 {statename:}tplroot
 {signin:}
 	{:hat}
 	{signinbody:}
-	<p>The entry to the personal account.</p>
+	{:lang.signin}
 	{:form}
 		{:inp-email}
 		{:inp-password}
@@ -237,3 +236,4 @@
 	<div style="margin-top:20px;" class="alert alert-{..result?:success?:danger}">
 		{.}
 	</div>
+{lang::}-user/i18n/{~lang(:struser)}.tpl

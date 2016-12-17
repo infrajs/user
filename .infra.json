@@ -1,9 +1,13 @@
 {
-	"pub":["terms"],
+	"pub":["terms","lang"],
 	"sentEmail":"infrajs\\user\\User::mail",
     "admins":[],
     "terms":"user/terms",
     "support":"contacts",
     "twitter":false,
+    "lang":{
+    	"def":"en",
+    	"list":["en","ru"]
+    },
     "facebook":false
 }
