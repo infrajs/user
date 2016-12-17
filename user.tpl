@@ -128,7 +128,7 @@
 			</div>
 		{:/form}
 {hat:}
-	<h1>{~lang(:struser,title)}</h1>
+	<h1>{Lang.str(:struser,title)}</h1>
 	{data.msg?data.msg:alert?:{tplroot}body}
 {statename:}tplroot
 {signin:}
@@ -236,4 +236,4 @@
 	<div style="margin-top:20px;" class="alert alert-{..result?:success?:danger}">
 		{.}
 	</div>
-{lang::}-user/i18n/{~lang(:struser)}.tpl
+{lang::}-user/i18n/{Lang.name(:struser)}.tpl
