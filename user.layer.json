@@ -55,7 +55,7 @@
 				"terms":{
 					"seojsontpl":"~seo/{crumb.parent.name}.{crumb.name}.json",
 					"title":"Terms",
-					"tpl":"-user/terms.tpl",
+					"tpltpl":"-user/i18n/{User.lang()}.terms.tpl",
 					"json":"-user/get.php"
 				},
 				"remindkey":{

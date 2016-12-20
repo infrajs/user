@@ -1,4 +1,4 @@
-window.user={
+window.User = {
 	is:function(){
 		var user=this.get();
 		return user.is;
@@ -15,5 +15,9 @@ window.user={
 	getEmail:function(){
 		var user=this.get();
 		return user.email;
+	},
+	lang: function (str){
+		if(typeof(str) == 'undefined') return Lang.name('user');
+		return Lang.str('user', str);
 	}
 }

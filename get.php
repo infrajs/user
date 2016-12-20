@@ -5,6 +5,7 @@ use infrajs\session\Session;
 use infrajs\router\Router;
 use infrajs\view\View;
 use infrajs\ans\Ans;
+use infrajs\nostore\Nostore;
 use infrajs\config\Config;
 
 if (!is_file('vendor/autoload.php')) {
@@ -34,7 +35,7 @@ if ($type == 'signup') {
 
 		$email = trim(strip_tags($_POST['email']));
 		if (!User::checkData($email, 'email')) {
-			return Ans::err($ans, 'You must specify a valid email address');
+			return Ans::err($ans, User::lang('You need to provide a valid email'));
 		}
 
 		$user = Session::getUser($email);// еще надо проверить есть ли уже такой емаил

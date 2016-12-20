@@ -5,6 +5,9 @@
     "terms":"user/terms",
     "support":"contacts",
     "twitter":false,
+    "require":"infra.php",
+    "dependencies":"event",
+    "js":["User.js","infra.js"],
     "lang":{
     	"def":"en",
     	"list":["en","ru"]

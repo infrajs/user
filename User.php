@@ -3,6 +3,7 @@ namespace infrajs\user;
 use infrajs\session\Session;
 use infrajs\nostore\Nostore;
 use infrajs\config\Config;
+use infrajs\lang\Lang;
 use infrajs\view\View;
 use infrajs\load\Load;
 use infrajs\template\Template;
@@ -72,7 +73,8 @@ class User
 		if (!$mailroot) return;
 		
 		//Когда нет указаний в конфиге... ничего такого...
-		$tpl = '-user/user.mail.tpl';
+		$ln = Lang::name();
+		$tpl = '-user/'.$ln.'.mail.tpl';
 
 		$subject = Template::parse($tpl, $data, $mailroot.'-subject');
 		$body = Template::parse($tpl, $data, $mailroot);
@@ -85,14 +87,20 @@ class User
 	 * Требуется выполнить регистрацию если указан email уже существующего пользователя
 	 * Проводит тихую регистрацию если пользователь не зарегистирован и email Не занят
 	 **/
-	public static function checkReg($email, $password = false) { //Сессия остаётся текущей
+	public static function lang($str = null)
+	{
+		if (is_null($str)) return Lang::name('user');
+		return Lang::str('user',$str);
+	}
+	public static function checkReg($email, $password = false) 
+	{ //Сессия остаётся текущей
 		$email = trim(strip_tags($email));
-		if (!User::checkData($email, 'email')) return 'Необходимо указать крректный email';
+		if (!User::checkData($email, 'email')) return User::lang('You need to provide a valid email');
 		$myemail = Session::getEmail();
 		if (!$myemail) {//Значит пользователь не зарегистрирован
 			$userData = Session::getUser($email);// еще надо проверить есть ли уже такой эмаил
 			if ($userData['session_id']) {
-				return 'На указанный email на сайте есть регистрация, необходимо <a href="/user/signin">авторизоваться</a>';
+				return User::lang('To your email on the website there is a registration, you need to <a href="/user/signin">login</a>');
 			} else {
 				Session::setEmail($email);
 				if ($password) Session::setPass($password);

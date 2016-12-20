@@ -29,3 +29,6 @@ user::get
 user::getEmail
 
 user::sentEmail
+
+## Локализация
+Русская и английская локализация [infrajs/lang](https://github.com/infrajs/lang) в папке i18n
