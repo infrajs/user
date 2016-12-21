@@ -4,7 +4,7 @@
 {breadcrumbs:}
 	<ol class="breadcrumb" style="float:right;">
 		<li class="active">
-			<a style="opacity:0.5; font-weight:{User.lang()=:ru?:bold}" href="?-env=:lang=ru">RU</a>
+			<a style="opacity:0.5; font-weight:{User.lang()=:ru?:bold}" href="?-env=:lang=ru">RU</a> 
 			<a style="opacity:0.5; font-weight:{User.lang()=:en?:bold}" href="?-env=:lang=en">EN</a>
 		</li>
 	</ol>
