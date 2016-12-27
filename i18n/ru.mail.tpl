@@ -1,57 +1,61 @@
-{test-subject:}Test letter
-{test:} Hi! It's a test letter. Enjoy!
+{test-subject:}Тестовое письмо
+{test:} Привет! Это тестовое письмо.
 
-host: {host}
-path: {path}
-email: {email}
-time: {time}
+Сайт: {host}
+Адрес: {path}
+Email: {email}
+Время: {time}
 
-{signup-subject:}Confirm Your {host} Account
-{signup:}Hi!
-Before we can give you access to all features, please confirm your account by clicking the link below.
+{signup-subject:}Подтвердите ваш аккаут на {host}
+{signup:}Привет!
+Перед тем, как Вам будут доступны все функции сайта нужно подтвердить email. 
+Для этого перейдите по следующей ссылке.
 
 {path}user/confirmkey/{email}/{key}
 
 {:footer}
 
-{remind-subject:}Change password on {host} account
-{remind:}Hi!
-If you wish to change your password, click the link below and enter your new password.
+{remind-subject:}Изменение пароля {host}
+{remind:}Привет!
+Если Вам действительно требуется изменить пароль, перейдите по следующей ссылке и укажите новый пароль.
 
 {path}user/remindkey/{email}/{key}
 
 {:footer}
 
-{newpass-subject:}Your {host} password has been changed
-{newpass:}The password for your account — {email} — was changed today.
+{newpass-subject:}Ваш пароль на {host} был изменён
+{newpass:}Пароль от вашего аккаунта {email} был изменён на новый.
 
-If you made this change, then it's all good!
+Если эти изменения сделали вы, значит всё ок!
 
-If you didn't make this change, contact support {path}{conf.support} and we'll look into it for you.
+Если вы этого не делали, то свяжитесь с поддержкой {path}{conf.support} и мы с этим разберёмся.
 
 {:footer}
 
-{confirm-subject:}Confirm Your {host} Account
-{confirm:}Hi!
-To complete your account, you must click the link below and confirm your email address.
+{confirm-subject:}Подтвердите ваш аккаунт {host}
+{confirm:}Привет!
+Для завершения регистрации нужно подтвердить Ваш email. Для этого нужно перейти по следующей ссылке.
 
 {path}user/confirmkey/{email}/{key}
 
 {:footer}
 
-{welcome-subject:}Welcome to {host}
-{welcome:}Welcome!
-Thank you for creating an account.
+{welcome-subject:}Добро пожаловать на {host}
+{welcome:}Приветствуем!
 
-Your account: {path}user
+Спасибо за регистрацию!
+
+Ваш аккаунт: {path}user
 
 {:footer}
 
-{footer:}Thanks, {host}
-Support: {path}{conf.support}
+{footer:}С уважением, {host}
+Поддержка: {path}{conf.support}
 
+{conf.vk:vk}
 {conf.twitter:twitter}
 {conf.facebook:facebook}
 
-{twitter:}Follow the {host} team on Twitter: {.}
-{facebook:}We're also on Facebook: {.}
+{twitter:}Twitter: {.}
+{facebook:}Facebook: {.}
+{vk:}Наша группа ВКонтакте: {.}
