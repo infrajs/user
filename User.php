@@ -74,7 +74,7 @@ class User
 		
 		//Когда нет указаний в конфиге... ничего такого...
 		$ln = Lang::name();
-		$tpl = '-user/'.$ln.'.mail.tpl';
+		$tpl = '-user/i18n/'.$ln.'.mail.tpl';
 
 		$subject = Template::parse($tpl, $data, $mailroot.'-subject');
 		$body = Template::parse($tpl, $data, $mailroot);
