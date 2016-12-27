@@ -279,7 +279,6 @@ if ($type == 'logout') {
 	if ($submit) {
 		Session::logout();
 		$ans['go'] = '/user';
-
 		return Ans::ret($ans, User::lang('Your status guest'));
 	}
 }
