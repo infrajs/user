@@ -107,11 +107,12 @@ class User
 				
 				if ($password) {
 					Session::setPass($password);
+					$password = md5($email.$password);
 				} else {
 					$password = $user['password'];
 				}
 
-				$password = md5($email.$password);
+				
 				$data = array();
 				$data['key'] = md5($password.date('Y.m.j'));
 				return User::sentEmail($email, 'signup', $data);
