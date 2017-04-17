@@ -27,7 +27,7 @@ $myemail = Session::getEmail();
 $ans['email'] = $myemail;
 if ($type == 'signup') {
 	if ($myemail) {
-		return Ans::err($ans, User::lang('You are logged in'));
+		return Ans::ret($ans, User::lang('You are logged in'));
 	}
 	if ($submit) {
 		if (!$ans['id']) {
@@ -60,7 +60,12 @@ if ($type == 'signup') {
 		}//Значит пользователь не зарегистрирован
 
 
-		$term = trim($_POST['terms']);
+		if (isset($_POST['terms'])) {
+			$term = trim($_POST['terms']);
+		} else {
+			$term = false;
+		}
+
 		if (!$term) {
 			return Ans::err($ans, User::lang('You need to accept the terms of service'));
 		}
@@ -68,18 +73,17 @@ if ($type == 'signup') {
 		$password = md5($email.$password);
 		$data = array();
 		$data['key'] = md5($password.date('Y.m.j'));
+		if (Access::debug()) $ans['data'] = $data;
+
 		Session::setEmail($email);
 		Session::setPass($password);
 		View::setCookie(Session::getName('pass'), md5($password));
-		$ans['go'] = '/user';
+		
 		Session::set('safe.confirmtime', time());
 		$msg = User::sentEmail($email, 'signup', $data);
-		if (is_string($msg)) {
-			return Ans::err($ans, $msg);
-		}
-		if (Access::debug()) {
-			$ans['data'] = $data;
-		}
+		if (is_string($msg)) return Ans::err($ans, $msg);
+		$ans['go'] = '/user';
+		
 		return Ans::ret($ans, User::lang('You have successfully registered. We sent you a letter.'));
 	}
 }

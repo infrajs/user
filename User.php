@@ -48,7 +48,7 @@ class User
 		$data['email'] = $email;
 		$data['time'] = time();
 
-		call_user_func($conf['sentEmail'], $email, $tpl, $data);
+		return call_user_func($conf['sentEmail'], $email, $tpl, $data);
 	}
 	public static function getEmail()
 	{
@@ -79,7 +79,8 @@ class User
 		$subject = Template::parse($tpl, $data, $mailroot.'-subject');
 		$body = Template::parse($tpl, $data, $mailroot);
 
-		return Mail::fromAdmin($subject, $email, $body);
+		$r = Mail::fromAdmin($subject, $email, $body);
+		if (!$r) return User::lang('Server error. Email not sent.');
 	}
 	/**
 	 * Волшебная функция, которая не пропускает дальше незарегистрированного пользователя 
@@ -98,13 +99,22 @@ class User
 		if (!User::checkData($email, 'email')) return User::lang('You need to provide a valid email');
 		$myemail = Session::getEmail();
 		if (!$myemail) {//Значит пользователь не зарегистрирован
-			$userData = Session::getUser($email);// еще надо проверить есть ли уже такой эмаил
+			$user = Session::getUser($email);// еще надо проверить есть ли уже такой эмаил
 			if ($userData['session_id']) {
 				return User::lang('To your email on the website there is a registration, you need to <a href=\'/user/signin\'>login</a>');
 			} else {
 				Session::setEmail($email);
-				if ($password) Session::setPass($password);
-				return User::sentEmail($email, 'signup');
+				
+				if ($password) {
+					Session::setPass($password);
+				} else {
+					$password = $user['password'];
+				}
+
+				$password = md5($email.$password);
+				$data = array();
+				$data['key'] = md5($password.date('Y.m.j'));
+				return User::sentEmail($email, 'signup', $data);
 			}
 		}
 	}

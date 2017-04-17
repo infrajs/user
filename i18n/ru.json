@@ -20,6 +20,7 @@
 	"Еmail was sent on":"Письмо уже было отправлено",
 	"Your email is confirmed":"Ваш email подтверждён",
 	"Confirm your email":"Подтвердите ваш email",
+	"Server error. Email not sent.":"Серверная ошибка. Письмо не отправлено.",
 	"Set a new password":"Установка нового пароля",
 	"Your email has not been confirmed":"Ваш email не подтверждён",
 	"Send a letter to confirm":"Отправить письмо для подтверждения",

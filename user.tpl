@@ -127,6 +127,7 @@
 		{:/form}
 {hat:}
 	<h1>{User.lang(title)}</h1>
+	{config.ans.msg?config.ans.msg:alert}
 	{data.msg?data.msg:alert?:{tplroot}body}
 {statename:}tplroot
 {signin:}
