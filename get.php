@@ -212,8 +212,8 @@ if ($type == 'confirmkey') {
 		return Ans::err($ans, User::lang('Incorrect link'));
 	}
 
-	$userData = Session::getUser();
-	$realkey = md5($userData['password'].date('Y.m.j'));
+	$user = Session::getUser();
+	$realkey = md5($user['password'].date('Y.m.j'));
 	if ($realkey !== $key) {
 		return Ans::err($ans, User::lang('Link outdated'));
 	}
