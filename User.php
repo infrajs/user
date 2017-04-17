@@ -38,7 +38,7 @@ class User
 
 		return $user;
 	}
-	/*public static function sentEmail($email, $tpl, $data = array())
+	public static function sentEmail($email, $tpl, $data = array())
 	{
 		$conf = Config::get('user');
 		$data['host'] = View::getHost();
@@ -49,7 +49,7 @@ class User
 		$data['time'] = time();
 
 		call_user_func($conf['sentEmail'], $email, $tpl, $data);
-	}*/
+	}
 	public static function getEmail()
 	{
 		return Session::getEmail();
@@ -75,14 +75,6 @@ class User
 		//Когда нет указаний в конфиге... ничего такого...
 		$ln = Lang::name();
 		$tpl = '-user/i18n/'.$ln.'.mail.tpl';
-		
-		$conf = Config::get('user');
-		$data['host'] = View::getHost();
-		$data['path'] = View::getPath();
-		$data['schema'] = View::getSchema();
-		$data['conf'] = $conf;
-		$data['email'] = $email;
-		$data['time'] = time();
 
 		$subject = Template::parse($tpl, $data, $mailroot.'-subject');
 		$body = Template::parse($tpl, $data, $mailroot);
@@ -112,7 +104,7 @@ class User
 			} else {
 				Session::setEmail($email);
 				if ($password) Session::setPass($password);
-				return User::mail($email, 'signup');
+				return User::sentEmail($email, 'signup');
 			}
 		}
 	}
