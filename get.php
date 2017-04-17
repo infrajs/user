@@ -5,6 +5,7 @@ use infrajs\session\Session;
 use infrajs\router\Router;
 use infrajs\view\View;
 use infrajs\ans\Ans;
+use infrajs\access\Access;
 use infrajs\nostore\Nostore;
 use infrajs\config\Config;
 
@@ -146,6 +147,10 @@ if ($type == 'remind') {
 		}
 		$data=array();
 		$data['key'] = md5($user['password'].date('Y.m.j'));//Пароль для востановления действует только сегодня и после смены пароля действовать перестанет
+
+		if (Access::debug()) {
+			$ans['user'] = Session::getUser($email);
+		}
 
 		$msg = User::sentEmail($email, 'remind', $data);
 		if (is_string($msg)) {
