@@ -109,6 +109,7 @@ class User
 					Session::setPass($password);
 					$password = md5($email.$password);
 				} else {
+					$user = Session::getUser($email);
 					$password = $user['password'];
 				}
 
