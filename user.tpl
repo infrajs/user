@@ -108,7 +108,7 @@
 	{firstsent:}
 		{:lang.descr-confirm}
 {confirmkey:}
-	<h1>{title}</h1>
+	<h1>{User.lang(title)}</h1>
 	{data.msg:alert}
 {change:}
 	{:hat}

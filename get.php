@@ -77,7 +77,9 @@ if ($type == 'signup') {
 		if (is_string($msg)) {
 			return Ans::err($ans, $msg);
 		}
-
+		if (Access::debug()) {
+			$ans['data'] = $data;
+		}
 		return Ans::ret($ans, User::lang('You have successfully registered. We sent you a letter.'));
 	}
 }
