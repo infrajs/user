@@ -284,13 +284,13 @@ if ($type == 'signin') {
 	}
 }
 if ($type == 'logout') {
-	if (!$myemail) {
-		return Ans::err($ans, User::lang('You are not logged in'));
-	}
 	if ($submit) {
 		Session::logout();
 		$ans['go'] = '/user';
-		return Ans::ret($ans, User::lang('Your status guest'));
+		return Ans::ret($ans);
+	}
+	if (!$myemail) {
+		return Ans::ret($ans, User::lang('You are not logged in'));
 	}
 }
 if ($type == 'user') {

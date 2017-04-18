@@ -93,26 +93,19 @@ class User
 		if (is_null($str)) return Lang::name('user');
 		return Lang::str('user',$str);
 	}
-	public static function checkReg($email, $password = false) 
+	public static function checkReg($email) 
 	{ //Сессия остаётся текущей
 		$email = trim(strip_tags($email));
 		if (!User::checkData($email, 'email')) return User::lang('You need to provide a valid email');
 		$myemail = Session::getEmail();
 		if (!$myemail) {//Значит пользователь не зарегистрирован
 			$user = Session::getUser($email);// еще надо проверить есть ли уже такой эмаил
-			if ($userData['session_id']) {
+			if ($user['session_id']) {
 				return User::lang('To your email on the website there is a registration, you need to <a href=\'/user/signin\'>login</a>');
 			} else {
 				Session::setEmail($email);
-				
-				if ($password) {
-					Session::setPass($password);
-					$password = md5($email.$password);
-				} else {
-					$user = Session::getUser($email);
-					$password = $user['password'];
-				}
-
+				$user = Session::getUser($email, true);
+				$password = $user['password'];
 				
 				$data = array();
 				$data['key'] = md5($password.date('Y.m.j'));
