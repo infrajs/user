@@ -16,8 +16,8 @@ if (!is_file('vendor/autoload.php')) {
 }
 
 $ans = array();
-$submit = !empty($_GET['submit']);
-$type = (string) @$_GET['type'];
+$submit = Ans::GET('submit','bool');
+$type = Ans::GET('type','string');
 $ans['id'] = Session::getId();
 
 $ans['is'] = User::is();
