@@ -2,7 +2,6 @@
     "name": "infrajs/user",
     "description": "Личный кабинет пользователя",
     "homepage":"https://github.com/infrajs/user",
-    "license": "GPL3",
     "autoload": {
         "psr-4": { "infrajs\\user\\": "/" }
     },
