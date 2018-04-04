@@ -109,7 +109,11 @@ class User
 				
 				$data = array();
 				$data['key'] = md5($password.date('Y.m.j'));
-				return User::sentEmail($email, 'signup', $data);
+				$msg = User::sentEmail($email, 'signup', $data);
+				if ($msg) {
+					//Письмо не отправлено, но нам то что... у человека появилась регистрация. И если что он пароль восстановит
+				}
+				return false;
 			}
 		}
 	}
