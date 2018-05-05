@@ -273,7 +273,8 @@ if ($type == 'signin') {
 
 		$userData = Session::getUser($email);
 		$password = trim($_POST['password']);
-		if (md5($email.$password) != $userData['password']) {
+		//if (md5($email.$password) != $userData['password']) {
+		if ($password != $userData['password']) {
 			return Ans::err($ans, User::lang('Wrong password or email'));
 		}
 		Session::change($userData['session_id']);
