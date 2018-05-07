@@ -114,7 +114,8 @@ if ($type == 'remindkey') {
 			return Ans::err($ans, User::lang('Passwords do not match'));
 		}
 
-		Session::setPass(md5($email.$password), $userData['session_id']);
+		//Session::setPass(md5($email.$password), $userData['session_id']);
+		Session::setPass($password, $userData['session_id']);
 		Session::change($userData['session_id']);
 
 		$msg = User::sentEmail($email, 'newpass');
@@ -240,7 +241,8 @@ if ($type == 'change') {
 			return Ans::err($ans, User::lang('You must specify a valid old password'));
 		}
 
-		$oldpas = md5($myemail.$oldpassword);
+		//$oldpas = md5($myemail.$oldpassword);
+		$oldpas = $oldpassword;
 		$user = Session::getUser();
 		if ($user['password'] != $oldpas) {
 			return Ans::err($ans, User::lang('Invalid current password'));
@@ -249,7 +251,8 @@ if ($type == 'change') {
 		if (!User::checkData($newpassword, 'password')) {
 			return Ans::err($ans, User::lang('You must specify a valid new password'));
 		}
-		$newpas = md5($myemail.$newpassword);
+		//$newpas = md5($myemail.$newpassword);
+		$newpas = $newpassword;
 		if ($newpassword != $repeatnewpassword) {
 			return Ans::err($ans, User::lang('Passwords do not match'));
 		}

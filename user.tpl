@@ -20,7 +20,7 @@
 	{:hat}
 	{userbody:}
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-8">
 			{data.email?:userauth?:userguest}
 		</div>
 	</div>
@@ -174,12 +174,12 @@
 	{struser:}user
 {form:}
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-8">
 			<form class="form-horizontal" action="/-user/get.php?type={tplroot}&submit=1" method="POST">
 	{/form:}
-				<div>
+				<!--<div>
 					{config.ans.msg:alert}
-				</div>
+				</div>-->
 			</form>
 		</div>
 	</div>
