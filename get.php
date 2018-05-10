@@ -70,7 +70,7 @@ if ($type == 'signup') {
 			return Ans::err($ans, User::lang('You need to accept the terms of service'));
 		}
 
-		$password = md5($email.$password);
+		//$password = md5($email.$password);
 		$data = array();
 		$data['key'] = md5($password.date('Y.m.j'));
 		if (Access::debug()) $ans['data'] = $data;
