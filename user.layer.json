@@ -17,11 +17,8 @@
 			"tpl":"-user/user.tpl",
 			"json":"-user/get.php?type=user",
 			"tplroot":"user",
-			"showanimate":true,
 			"global":"user",
 			"id":"user",
-			"unicklayer":"user",
-			"unicklayertochild":true,
 			"childs":{
 				"signup":{
 					"seojsontpl":"~seo/{crumb.parent.name}.{crumb.name}.json",
