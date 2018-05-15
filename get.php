@@ -9,12 +9,6 @@ use infrajs\access\Access;
 use infrajs\nostore\Nostore;
 use infrajs\config\Config;
 
-if (!is_file('vendor/autoload.php')) {
-	chdir('../../../');
-	require_once('vendor/autoload.php');
-	Router::init();
-}
-
 $ans = array();
 $submit = Ans::GET('submit','bool');
 $type = Ans::GET('type','string');
@@ -203,14 +197,9 @@ if ($type == 'confirm') {
 	}
 }
 if ($type == 'confirmkey') {
-	if (!$myemail) {
-		return Ans::err($ans, User::lang('You are not logged in'));
-	}
-	$verify = Session::getVerify();
-	if ($verify) {
-		return Ans::ret($ans, User::lang('Address already verified'));
-	}
-	$key = $_REQUEST['key'];
+	
+	
+	$key = Ans::REQ('key');
 	if (!$key) {
 		return Ans::err($ans, User::lang('Incorrect link'));
 	}
@@ -218,14 +207,22 @@ if ($type == 'confirmkey') {
 	if (!User::checkData($email, 'email')) {
 		return Ans::err($ans, User::lang('Incorrect link'));
 	}
-
-	$user = Session::getUser();
+	$user = Session::getUser($email);
+	if (!$user) {
+		return Ans::err($ans, User::lang('Link outdated'));
+	}
+	if (empty($user['verify'])) {
+		return Ans::ret($ans, User::lang('Address already verified'));
+	}
 	$realkey = md5($user['password'].date('Y.m.j'));
 	if ($realkey !== $key) {
 		return Ans::err($ans, User::lang('Link outdated'));
 	}
-	Session::setVerify();
-	User::sentEmail($myemail, 'welcome');
+	Session::setVerify($email);
+	User::sentEmail($email, 'welcome');
+	if (!$myemail) { //Сейчас нет авторизации
+		Session::change($user['session_id']); //Вы авторизованы
+	}
 	return Ans::ret($ans, User::lang('All done. Address verified.'));
 }
 if ($type == 'change') {
