@@ -211,7 +211,7 @@ if ($type == 'confirmkey') {
 	if (!$user) {
 		return Ans::err($ans, User::lang('Link outdated'));
 	}
-	if (empty($user['verify'])) {
+	if (!empty($user['verify'])) {
 		return Ans::ret($ans, User::lang('Address already verified'));
 	}
 	$realkey = md5($user['password'].date('Y.m.j'));
