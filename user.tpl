@@ -3,19 +3,19 @@
 	<div id="userbody"></div>
 {breadcrumbs:}
 	<ol class="breadcrumb" style="float:right;">
-		<li class="active">
+		<li class="breadcrumb-item active">
 			<a style="opacity:0.5; font-weight:{User.lang()=:ru?:bold}" href="?-env={Env.name()}:lang=ru">RU</a>&nbsp;<a style="opacity:0.5; font-weight:{User.lang()=:en?:bold}" href="?-env={Env.name()}:lang=en">EN</a>
 		</li>
 	</ol>
 	<ol class="breadcrumb">
-	  <li><a href="/">{User.lang(:Home)}</a></li>
+	  <li class="breadcrumb-item"><a href="/">{User.lang(:Home)}</a></li>
 	  {crumb.child?:blong?:bshort}
 	</ol>
 	{bshort:}
-		<li class="active">{User.lang(:User)} {data.email}</li>
+		<li class="breadcrumb-item active">{User.lang(:User)} {data.email}</li>
 	{blong:}
 		<li><a href="/user">{User.lang(:User)} {data.email}</a></li>
-		<li class="active">{User.lang(Controller.ids.user.childs[crumb.child.name].title)}</li>
+		<li class="breadcrumb-item active">{User.lang(Controller.ids.user.childs[crumb.child.name].title)}</li>
 {user:}
 	{:hat}
 	{userbody:}
