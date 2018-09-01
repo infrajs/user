@@ -14,7 +14,7 @@
 	{bshort:}
 		<li class="breadcrumb-item active">{User.lang(:User)} {data.email}</li>
 	{blong:}
-		<li><a href="/user">{User.lang(:User)} {data.email}</a></li>
+		<li class="breadcrumb-item"><a href="/user">{User.lang(:User)} {data.email}</a></li>
 		<li class="breadcrumb-item active">{User.lang(Controller.ids.user.childs[crumb.child.name].title)}</li>
 {user:}
 	{:hat}
@@ -60,7 +60,7 @@
 		<p>{data.time?:alreadysent?:firstsentremind}</p>
 		{:form}
 			{:inp-email}
-			<div class="control-group" style="margin-top:20px">
+			<div class="form-group" style="margin-top:20px">
 				<div class="controls">
 					<button class="btn btn-success">{User.lang(:Remind)}</button>
 					<span style="margin-left:10px">
@@ -81,7 +81,7 @@
 		<input type="hidden" value="{crumb.child.child.name}" name="key">
 		{:inp-password}
 		{:inp-repeatpassword}
-		<div class="control-group" style="margin-top:20px">
+		<div class="form-group" style="margin-top:20px">
 			<button class="btn btn-success">{User.lang(:Submit)}</button>
 		</div>
 		{:/form}
@@ -89,7 +89,7 @@
 	{:hat}
 	{logoutbody:}
 	{:form}
-		<div class="control-group" style="margin-top:20px">
+		<div class="form-group" style="margin-top:20px">
 			<button class="btn btn-danger">{User.lang(:Logout Now)}</button>
 		</div>
 	{:/form}
@@ -99,7 +99,7 @@
 	{:form}
 		{data.time?:alreadysent?:firstsent}
 
-		<div class="control-group" style="margin-top:20px">
+		<div class="form-group" style="margin-top:20px">
 			<button class="btn btn-success">{User.lang(:Send a letter to confirm)}</button>
 		</div>
 	{:/form}
@@ -118,7 +118,7 @@
 			{:inp-oldpassword}
 			{:inp-newpassword}
 			{:inp-repeatnewpassword}
-			<div class="control-group" style="margin-top:20px">
+			<div class="form-group" style="margin-top:20px">
 				<!-- Button -->
 				<div class="controls">
 					<button class="btn btn-success">{User.lang(:Change)}</button>
@@ -137,7 +137,7 @@
 	{:form}
 		{:inp-email}
 		{:inp-password}
-		<div class="control-group" style="margin-top:20px">
+		<div class="form-group" style="margin-top:20px">
 			<!-- Button -->
 			<div class="controls">
 				<button class="btn btn-success">{User.lang(Controller.ids.user.childs.signin.title)}</button>
@@ -156,14 +156,11 @@
 		{:inp-email}
 		{:inp-password}
 		{:inp-repeatpassword}
-		<div class="control-group">
-			<div class="checkbox">
-				<label>
-					<input name="terms" autosave="0" type="checkbox">{User.lang(:I have read and agree to the)} <a href="{~path(Config.get(:struser).terms)}">{User.lang(:terms of service)}</a>
-				</label>
-			</div>
-	    </div>
-		<div class="control-group" style="margin-top:20px">
+		
+		<div class="form-check">
+			<input class="form-check-input" name="terms" autosave="0" type="checkbox">{User.lang(:I have read and agree to the)} <a href="{~path(Config.get(:struser).terms)}">{User.lang(:terms of service)}</a>
+		</div>
+		<div class="form-group" style="margin-top:20px">
 			<button class="btn btn-success">{User.lang(Controller.ids.user.childs.signup.title)}</button>
 			<span style="margin-left:10px">
 				<a href="/user/signin">{User.lang(Controller.ids.user.childs.signin.title)}</a>,
@@ -184,51 +181,51 @@
 		</div>
 	</div>
 {inp-email:}
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="email">Email</label>
 		<div class="controls">
 			<input type="email" id="email" name="email" placeholder="" class="form-control input-lg">
-			<p class="help-block">{User.lang(:Please provide your E-mail)}</p>
+			<p class="text-muted">{User.lang(:Please provide your E-mail)}</p>
 		</div>
 	</div>
 {inp-password:}
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="password">{User.lang(:Password)}</label>
 		<div class="controls">
 			<input type="password" id="password" name="password" placeholder="" class="form-control input-lg">
-			<p class="help-block">{User.lang(:Password should be at least 6 characters)}</p>
+			<p class="text-muted">{User.lang(:Password should be at least 6 characters)}</p>
 		</div>
 	</div>
 {inp-newpassword:}
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="newpassword">{User.lang(:New password)}</label>
 		<div class="controls">
 			<input type="password" id="newpassword" name="newpassword" placeholder="" class="form-control input-lg">
-			<p class="help-block">{User.lang(:Password should be at least 6 characters)}</p>
+			<p class="text-muted">{User.lang(:Password should be at least 6 characters)}</p>
 		</div>
 	</div>
 {inp-oldpassword:}
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="password">{User.lang(:Old password)}</label>
 		<div class="controls">
 			<input type="password" id="oldpassword" name="oldpassword" placeholder="" class="form-control input-lg">
-			<p class="help-block">{User.lang(:Specify your current password)}</p>
+			<p class="text-muted">{User.lang(:Specify your current password)}</p>
 		</div>
 	</div>
 {inp-repeatnewpassword:}
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="repeatnewpassword">{User.lang(:Repeat new password)}</label>
 		<div class="controls">
 			<input type="password" id="repeatnewpassword" name="repeatnewpassword" placeholder="" class="form-control input-lg">
-			<p class="help-block">{User.lang(:Repeat your password)}</p>
+			<p class="text-muted">{User.lang(:Repeat your password)}</p>
 		</div>
 	</div>
 {inp-repeatpassword:}
-	<div class="control-group">
+	<div class="form-group">
 		<label class="control-label" for="repeatpassword">{User.lang(:Repeat password)}</label>
 		<div class="controls">
 			<input type="password" id="repeatpassword" name="repeatpassword" placeholder="" class="form-control input-lg">
-			<p class="help-block">{User.lang(:Repeat your password)}</p>
+			<p class="text-muted">{User.lang(:Repeat your password)}</p>
 		</div>
 	</div>
 {alert:}
