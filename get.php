@@ -66,7 +66,7 @@ if ($type == 'signup') {
 
 		//$password = md5($email.$password);
 		$data = array();
-		$data['key'] = md5($password.date('Y.m.j'));
+		$data['key'] = md5($password.date('Y.m'));
 		if (Access::debug()) $ans['data'] = $data;
 
 		Session::setEmail($email);
@@ -94,7 +94,7 @@ if ($type == 'remindkey') {
 		return Ans::err($ans, User::lang('Incorrect link'));
 	}
 	$userData = Session::getUser($email);
-	$realkey = md5($userData['password'].date('Y.m.j'));
+	$realkey = md5($userData['password'].date('Y.m'));
 	if ($realkey !== $key) {
 		return Ans::err($ans, User::lang('Link outdated'));
 	}
@@ -147,7 +147,7 @@ if ($type == 'remind') {
 			return Ans::err($ans, User::lang('Email has not been registered yet'));
 		}
 		$data=array();
-		$data['key'] = md5($user['password'].date('Y.m.j'));//Пароль для востановления действует только сегодня и после смены пароля действовать перестанет
+		$data['key'] = md5($user['password'].date('Y.m'));//Пароль для востановления действует только сегодня и после смены пароля действовать перестанет
 
 		if (Access::debug()) {
 			$ans['user'] = Session::getUser($email);
@@ -184,7 +184,7 @@ if ($type == 'confirm') {
 		$user = Session::getUser();
 		if (!$user['email']) return Ans::err($ans, User::lang('Email has not been registered yet'));
 
-		$data['key'] = md5($user['password'].date('Y.m.j'));
+		$data['key'] = md5($user['password'].date('Y.m'));
 
 		Session::set('safe.confirmtime', $time);
 
@@ -214,7 +214,7 @@ if ($type == 'confirmkey') {
 	if (!empty($user['verify'])) {
 		return Ans::ret($ans, User::lang('Address already verified'));
 	}
-	$realkey = md5($user['password'].date('Y.m.j'));
+	$realkey = md5($user['password'].date('Y.m'));
 	if ($realkey !== $key) {
 		return Ans::err($ans, User::lang('Link outdated'));
 	}
