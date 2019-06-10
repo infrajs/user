@@ -12,6 +12,9 @@ use infrajs\config\Config;
 $ans = array();
 $submit = Ans::GET('submit','bool');
 $type = Ans::GET('type','string');
+$back = Ans::GET('back','string');
+if ($back) Session::set('user.back', $back);
+
 $ans['id'] = Session::getId();
 
 $ans['is'] = User::is();
@@ -76,7 +79,11 @@ if ($type == 'signup') {
 		Session::set('safe.confirmtime', time());
 		$msg = User::sentEmail($email, 'signup', $data);
 		if (is_string($msg)) return Ans::err($ans, $msg);
-		$ans['go'] = '/user';
+		//$ans['go'] = '/user';
+
+		$back = Session::get('user.back','/user');
+		Session::set('user.back');
+		$ans['go'] = $back;
 		
 		return Ans::ret($ans, User::lang('You have successfully registered. We sent you a letter.'));
 	}
@@ -265,7 +272,9 @@ if ($type == 'signin') {
 	if ($myemail) {
 		return Ans::err($ans, User::lang('You are already logged in'));
 	}
+
 	if ($submit) {
+		
 		$email = trim(strip_tags($_POST['email']));
 		if (!User::checkData($email, 'email')) {
 			return Ans::err($ans, User::lang('You must specify a valid email address'));
@@ -277,17 +286,25 @@ if ($type == 'signin') {
 		if ($password != $userData['password']) {
 			return Ans::err($ans, User::lang('Wrong password or email'));
 		}
-		Session::change($userData['session_id']);
+		
+		$back = Session::get('user.back','/user');
+		Session::set('user.back');
+		$ans['go'] = $back;
 
-		$ans['go'] = '/user';
+		Session::change($userData['session_id']);
 
 		return Ans::ret($ans, User::lang('You are logged in'));
 	}
 }
 if ($type == 'logout') {
 	if ($submit) {
+		
+		$back = Session::get('user.back','/user');
+		Session::set('user.back');
+		$ans['go'] = $back;
+
 		Session::logout();
-		$ans['go'] = '/user';
+		
 		return Ans::ret($ans);
 	}
 	if (!$myemail) {
