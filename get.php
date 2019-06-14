@@ -105,6 +105,7 @@ if ($type == 'remindkey') {
 	if ($realkey !== $key) {
 		return Ans::err($ans, User::lang('Link outdated'));
 	}
+	Session::setVerify($email);
 	if ($submit) {
 		$password = trim($_POST['password']);
 		if (!User::checkData($password, 'password')) {
