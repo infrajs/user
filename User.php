@@ -79,7 +79,8 @@ class User
 		$subject = Template::parse($tpl, $data, $mailroot.'-subject');
 		$body = Template::parse($tpl, $data, $mailroot);
 
-		$r = Mail::fromAdmin($subject, $email, $body);
+		//$r = Mail::fromAdmin($subject, $email, $body);
+		$r = Mail::html($subject, '<pre>'.$body.'<pre>', true, $email);//from to
 		if (!$r) return User::lang('Server error. Email not sent.');
 	}
 	/**
@@ -108,7 +109,7 @@ class User
 				$password = $user['password'];
 				
 				$data = array();
-				$data['key'] = md5($password.date('Y.m.j'));
+				$data['key'] = md5($password.date('Y.m'));
 				$msg = User::sentEmail($email, 'signup', $data);
 				if ($msg) {
 					//Письмо не отправлено, но нам то что... у человека появилась регистрация. И если что он пароль восстановит

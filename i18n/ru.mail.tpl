@@ -11,7 +11,7 @@ Email: {email}
 Перед тем, как Вам будут доступны все функции сайта нужно подтвердить email. 
 Для этого перейдите по следующей ссылке.
 
-{path}user/confirmkey/{email}/{key}
+<a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a>
 
 {:footer}
 
@@ -19,7 +19,7 @@ Email: {email}
 {remind:}Добрый день!
 Если Вам действительно требуется изменить пароль, перейдите по следующей ссылке и укажите новый пароль.
 
-{path}user/remindkey/{email}/{key}
+<a href="{path}user/remindkey/{email}/{key}">{path}user/remindkey/{email}/{key}</a>
 
 {:footer}
 
@@ -28,7 +28,7 @@ Email: {email}
 
 Если эти изменения сделали вы, значит всё ок!
 
-Если вы этого не делали, то свяжитесь с поддержкой {path}{conf.support} и мы с этим разберёмся.
+Если вы этого не делали, то свяжитесь с поддержкой <a href="{path}{conf.support}">{path}{conf.support}</a> и мы с этим разберёмся.
 
 {:footer}
 
@@ -36,7 +36,7 @@ Email: {email}
 {confirm:}Добрый день!
 Для завершения регистрации нужно подтвердить Ваш email. Для этого нужно перейти по следующей ссылке.
 
-{path}user/confirmkey/{email}/{key}
+<a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a>
 
 {:footer}
 
@@ -45,12 +45,12 @@ Email: {email}
 
 Спасибо за регистрацию!
 
-Ваш аккаунт: {path}user
+Ваш аккаунт: <a href="{path}user">{path}user</a>
 
 {:footer}
 
-{footer:}С уважением, {host}
-Поддержка: {path}{conf.support}
+{footer:}С уважением, <a href="{host}">{host}</a>
+Поддержка: <a href="{path}{conf.support}">{path}{conf.support}</a>
 
 {conf.vk:vk}
 {conf.twitter:twitter}
