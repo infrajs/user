@@ -56,6 +56,6 @@ Email: {email}
 {conf.twitter:twitter}
 {conf.facebook:facebook}
 
-{twitter:}Twitter: {.}
-{facebook:}Facebook: {.}
-{vk:}Наша группа ВКонтакте: {.}
+{twitter:}Twitter: <a href="{.}">{.}</a>
+{facebook:}Facebook: <a href="{.}">{.}</a>
+{vk:}Наша группа ВКонтакте: <a href="{.}">{.}</a>
