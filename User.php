@@ -102,7 +102,7 @@ class User
 		if (!$myemail) {//Значит пользователь не зарегистрирован
 			$user = Session::getUser($email);// еще надо проверить есть ли уже такой эмаил
 			if ($user['session_id']) {
-				return User::lang('To your email on the website there is a registration, you need to <a href=\'/user/signin\'>login</a>');
+				return User::lang('To your email on the website there is a registration, you need to <a href=\'/user/signin?back=ref\'>login</a>');
 			} else {
 				Session::setEmail($email);
 				$user = Session::getUser($email, true);

@@ -32,7 +32,7 @@
 	"Repeat your password":"Повторите указаный пароль",
 	"Repeat password":"Повторите пароль",
 	"Specify your current password":"Укажите текущий пароль",
-	"To your email on the website there is a registration, you need to <a href='/user/signin'>login</a>":"На указанный email на сайте есть регистрация, необходимо <a href='/user/signin'>авторизоваться</a>",
+	"To your email on the website there is a registration, you need to <a href='/user/signin?back=ref'>login</a>":"На указанный email на сайте есть регистрация, необходимо <a href='/user/signin?back=ref'>авторизоваться</a>",
 	"You are logged in":"Вы авторизованы",
 	"You must specify a valid password":"Укажите корректный пароль",
 	"Password changed. You are logged in.":"Пароль изменён. Вы авторизованы.",
