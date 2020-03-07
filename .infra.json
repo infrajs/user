@@ -2,7 +2,7 @@
 	"pub":["terms","lang"],
 	"sentEmail":"infrajs\\user\\User::mail",
     "admins":[],
-    "terms":"user/terms",
+    "terms":"/terms",
     "support":"contacts",
     "twitter":false,
     "require":"infra.php",
