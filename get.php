@@ -76,8 +76,9 @@ if ($type == 'signup') {
 		Session::setPass($password);
 		View::setCookie(Session::getName('pass'), md5($password));
 		
-		Session::set('safe.confirmtime', time());
-		$msg = User::sentEmail($email, 'signup', $data);
+		//Session::set('safe.confirmtime', time());
+		//$msg = User::sentEmail($email, 'signup', $data);
+		$msg = User::sentEmail($email, 'welcome', $data);
 		if (is_string($msg)) return Ans::err($ans, $msg);
 		//$ans['go'] = '/user';
 
