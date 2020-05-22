@@ -172,7 +172,13 @@
 {form:}
 	<div class="row">
 		<div class="col-md-8">
-			<form class="form-horizontal" action="/-user/get.php?type={tplroot}&submit=1" method="POST">
+			<form 
+			data-layerid="{id}"
+			data-autosave="{autosavename}" 
+			data-goal="{goal}" 
+			data-global="{global}"
+			data-recaptcha="user"
+			class="form form-horizontal" action="/-user/get.php?type={tplroot}&submit=1" method="POST">
 	{/form:}
 				<!--<div>
 					{config.ans.msg:alert}

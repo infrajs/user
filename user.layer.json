@@ -28,7 +28,6 @@
 					"jsontpl2":"-user/get.php?type={crumb.name}&back={Crumb.referrer}",
 					"tplroottpl":"{crumb.name}",
 					"autosavename":"user",
-					"onsubmit":true,
 					"global":"user"
 				},
 				"logout":{
@@ -39,7 +38,6 @@
 					"jsontpl2":"-user/get.php?type={crumb.name}&back={Crumb.referrer}",
 					"tplroottpl":"{crumb.name}",
 					"autosavename":"user",
-					"onsubmit":true,
 					"global":"user"
 				},
 				"signin":{
@@ -50,7 +48,6 @@
 					"jsontpl2":"-user/get.php?type={crumb.name}&back={Crumb.referrer}",
 					"tplroottpl":"{crumb.name}",
 					"autosavename":"user",
-					"onsubmit":true,
 					"global":"user"
 				},
 				"terms":{
@@ -66,7 +63,6 @@
 					"tplroottpl":"{crumb.name}",
 					"jsontpl":"-user/get.php?type={crumb.name}&email={crumb.child.name}&key={crumb.child.child.name}",
 					"autosavename":"user",
-					"onsubmit":true,
 					"global":"user"
 				},
 				"remind":{
@@ -76,7 +72,6 @@
 					"jsontpl":"-user/get.php?type={crumb.name}",
 					"tplroottpl":"{crumb.name}",
 					"autosavename":"user",
-					"onsubmit":true,
 					"global":"user"
 				},
 				"change":{
@@ -86,7 +81,6 @@
 					"jsontpl":"-user/get.php?type={crumb.name}",
 					"tplroottpl":"{crumb.name}",
 					"autosavename":"user",
-					"onsubmit":true,
 					"global":"user"
 				},
 				"confirm":{
@@ -96,7 +90,6 @@
 					"jsontpl":"-user/get.php?type={crumb.name}",
 					"tplroottpl":"{crumb.name}",
 					"autosavename":"user",
-					"onsubmit":true,
 					"global":"user"
 				},
 				"confirmkey":{
@@ -106,7 +99,6 @@
 					"tplroottpl":"{crumb.name}",
 					"jsontpl":"-user/get.php?type={crumb.name}&email={crumb.child.name}&key={crumb.child.child.name}",
 					"autosavename":"user",
-					"onsubmit":true,
 					"global":"user"
 				}
 			}
