@@ -272,7 +272,9 @@ if ($type == 'change') {
 }
 if ($type == 'signin') {
 	if ($myemail) {
-		return Ans::err($ans, User::lang('You are already logged in'));
+		//return Ans::err($ans, User::lang('You are already logged in'));
+		return Ans::err($ans, User::lang('You are logged in'));
+		
 	}
 
 	if ($submit) {
@@ -294,8 +296,8 @@ if ($type == 'signin') {
 		$ans['go'] = $back;
 
 		Session::change($userData['session_id']);
-
-		return Ans::ret($ans, User::lang('You are logged in'));
+		return Ans::ret($ans);
+		//return Ans::ret($ans, User::lang('You are logged in'));
 	}
 }
 if ($type == 'logout') {
