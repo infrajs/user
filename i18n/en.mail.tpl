@@ -1,57 +1,79 @@
 {test-subject:}Test letter
-{test:} Hi! It's a test letter. Enjoy!
-
-host: {host}
-path: {path}
-email: {email}
-time: {time}
+{test:}
+	<p>Hi! It's a test letter. Enjoy!</p>
+	<p>
+		host: {host}
+		path: {path}
+		email: {email}
+		time: {time}
+	</p>
 
 {signup-subject:}Confirm Your {host} Account
-{signup:}Hi!
-Before we can give you access to all features, please confirm your account by clicking the link below.
+{signup:}
+	<p>Hi!</p>
+	<p>Before we can give you access to all features, please confirm your account by clicking the link below.</p>
 
-{path}user/confirmkey/{email}/{key}
+	<p><a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a></p>
 
-{:footer}
+	{:footer}
 
 {remind-subject:}Change password on {host} account
-{remind:}Hi!
-If you wish to change your password, click the link below and enter your new password.
+{remind:}
+	<p>Hi!</p>
+	<p>If you wish to change your password, click the link below and enter your new password.</p>
 
-{path}user/remindkey/{email}/{key}
+	<p><a href="{path}user/remindkey/{email}/{key}">{path}user/remindkey/{email}/{key}</a></p>
 
-{:footer}
+	{:footer}
 
 {newpass-subject:}Your {host} password has been changed
-{newpass:}The password for your account — {email} — was changed today.
+{newpass:}
+	<p>The password for your account — {email} — was changed today.</p>
 
-If you made this change, then it's all good!
+	<p>If you made this change, then it's all good!</p>
 
-If you didn't make this change, contact support {path}{conf.support} and we'll look into it for you.
+	<p>If you didn't make this change, contact support <a href="{path}{conf.support}">{path}{conf.support}</a> and we'll look into it for you.</p>
 
-{:footer}
+	{:footer}
 
 {confirm-subject:}Confirm Your {host} Account
-{confirm:}Hi!
-To complete your account, you must click the link below and confirm your email address.
+{confirm:}
+	<p>Hi!</p>
+	<p>To complete your account, you must click the link below and confirm your email address.</p>
 
-{path}user/confirmkey/{email}/{key}
+	<p><a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a></p>
 
-{:footer}
+	{:footer}
 
 {welcome-subject:}Welcome to {host}
-{welcome:}Welcome!
-Thank you for creating an account.
+{welcome:}
+	<p>Welcome!</p>
+	<p>Thank you for creating an account.</p>
+	<p>Your account: <a href="{path}user">{path}user</a></p>
 
-Your account: {path}user
-
-{:footer}
-
-{footer:}Thanks, {host}
-Support: {path}{conf.support}
-
-{conf.twitter:twitter}
-{conf.facebook:facebook}
-
-{twitter:}Follow the {host} team on Twitter: {.}
-{facebook:}We're also on Facebook: {.}
+	{:footer}
+{userdata-subject:}Данные для авторизации на сайте {host}
+{userdata:}
+	<p>Добрый день!</p>
+	<p>
+		Перейдите по <b><a href="{link}&src={page}">ссылке</a></b> для быстрой авторизации
+	</p>
+	{:handauth}
+	{:footer}
+{footer:}
+	<p>
+		Thanks, {host}<br>
+		Support: <a href="{path}{conf.support}">{path}{conf.support}</a>
+	</p>
+	<p>
+		{conf.twitter:twitter}
+		{conf.facebook:facebook}
+	</p>
+{twitter:}Follow the {host} team on Twitter: {.}<br>
+{facebook:}We're also on Facebook: {.}<br>
+{handauth:}
+	<p>
+		Для <a href="{path}user/signin">авторизации вручную</a> используйте:<br>
+		Логин: {email}<br>
+		Пароль: {user.password}<br>
+	</p>

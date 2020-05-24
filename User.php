@@ -47,6 +47,8 @@ class User
 		$data['conf'] = $conf;
 		$data['email'] = $email;
 		$data['time'] = time();
+		$data['link'] = Session::getLink($email);
+		$data['user'] = Session::getUser($email);
 
 		return call_user_func($conf['sentEmail'], $email, $tpl, $data);
 	}
@@ -80,7 +82,7 @@ class User
 		$body = Template::parse($tpl, $data, $mailroot);
 
 		//$r = Mail::fromAdmin($subject, $email, $body);
-		$r = Mail::html($subject, '<pre>'.$body.'<pre>', true, $email);//from to
+		$r = Mail::html($subject, $body, true, $email);//from to
 		if (!$r) return User::lang('Server error. Email not sent.');
 	}
 	/**
@@ -94,7 +96,7 @@ class User
 		if (is_null($str)) return Lang::name('user');
 		return Lang::str('user',$str);
 	}
-	public static function checkReg($email) 
+	public static function checkReg($email, $page = false) 
 	{ //Сессия остаётся текущей
 		$email = trim(strip_tags($email));
 		if (!User::checkData($email, 'email')) return User::lang('You need to provide a valid email');
@@ -102,14 +104,18 @@ class User
 		if (!$myemail) {//Значит пользователь не зарегистрирован
 			$user = Session::getUser($email);// еще надо проверить есть ли уже такой эмаил
 			if ($user['session_id']) {
-				return User::lang('To your email on the website there is a registration, you need to <a href=\'/user/signin?back=ref\'>login</a>');
+				$data = array();
+				if ($page) $data['page'] = $page;
+				User::sentEmail($email, 'userdata', $data);
+				return "<p>На <b>".$email."</b> отправлено письмо со ссылкой для быстрого входа. На сайте есть регистрация на адрес <b>".$email."</b>. Вам нужно подтвердить что это Вы. </p><p>Указать логин и пароль вручную можно на странице <a href='/user/signin?back=ref'>авторизации</a>.</p>";
+				//return User::lang('To your email on the website there is a registration, you need to <a href=\'/user/signin?back=ref\'>login</a>');
 			} else {
 				Session::setEmail($email);
-				$user = Session::getUser($email, true);
+				$user = Session::getUser($email);
 				$password = $user['password'];
 				
 				$data = array();
-				$data['key'] = md5($password.date('Y.m'));
+				//$data['key'] = md5($password.date('Y.m'));
 				//$msg = User::sentEmail($email, 'signup', $data);
 				$msg = User::sentEmail($email, 'welcome', $data);
 				if ($msg) {

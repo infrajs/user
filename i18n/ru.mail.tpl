@@ -1,61 +1,84 @@
 {test-subject:}Тестовое письмо
-{test:} Добрый день! Это тестовое письмо.
-
-Сайт: {host}
-Адрес: {path}
-Email: {email}
-Время: {time}
+{test:} 
+	<p>Добрый день! Это тестовое письмо.</p>
+	<p>
+		Сайт: {host}<br>
+		Адрес: {path}<br>
+		Email: {email}<br>
+		Время: {time}<br>
+	</p>
 
 {signup-subject:}Подтвердите ваш аккаут на {host}
-{signup:}Добрый день!
-Перед тем, как Вам будут доступны все функции сайта, нужно подтвердить email. 
-Для этого перейдите по следующей ссылке.
+{signup:}
+	<p>Добрый день!</p>
+	<p>Перед тем, как Вам будут доступны все функции сайта, нужно подтвердить email. 
+	Для этого перейдите по следующей ссылке.</p>
 
-<a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a>
+	<p><a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a></p>
 
-{:footer}
+	{:footer}
 
 {remind-subject:}Изменение пароля {host}
-{remind:}Добрый день!
-Если Вам действительно требуется изменить пароль, перейдите по следующей ссылке и укажите новый пароль.
+{remind:}
+	<p>Добрый день!</p>
+	<p>Если Вам действительно требуется изменить пароль, перейдите по следующей ссылке и укажите новый пароль.</p>
 
-<a href="{path}user/remindkey/{email}/{key}">{path}user/remindkey/{email}/{key}</a>
+	<p><a href="{path}user/remindkey/{email}/{key}">{path}user/remindkey/{email}/{key}</a></p>
 
-{:footer}
+	{:footer}
 
 {newpass-subject:}Ваш пароль на {host} был изменён
-{newpass:}Пароль от вашего аккаунта {email} был изменён на новый.
+{newpass:}
+	<p>Пароль от вашего аккаунта {email} был изменён на новый.</p>
 
-Если эти изменения сделали вы, значит всё ок!
+	<p>Если эти изменения сделали вы, значит всё ок!</p>
 
-Если вы этого не делали, то свяжитесь с поддержкой <a href="{path}{conf.support}">{path}{conf.support}</a> и мы с этим разберёмся.
+	<p>Если вы этого не делали, то свяжитесь с поддержкой <a href="{path}{conf.support}">{path}{conf.support}</a> и мы с этим разберёмся.</p>
 
-{:footer}
+	{:footer}
 
 {confirm-subject:}Подтвердите ваш аккаунт {host}
-{confirm:}Добрый день!
-Для завершения регистрации нужно подтвердить Ваш email. Для этого нужно перейти по следующей ссылке.
+{confirm:}
+	<p>Добрый день!</p>
+	<p>Для завершения регистрации нужно подтвердить Ваш email. Для этого нужно перейти по следующей ссылке.</p>
 
-<a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a>
+	<p><a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a></p>
 
-{:footer}
+	{:footer}
 
 {welcome-subject:}Добро пожаловать на {host}
-{welcome:}Добрый день!
+{welcome:}
+	<p>Добрый день!</p>
 
-Спасибо за регистрацию!
+	<p>Спасибо за регистрацию!</p>
 
-Ваш аккаунт: <a href="{path}user">{path}user</a>
+	<p>Ссылка для быстрого входа: <a href="{link}">{path}</a></p>
+	{:handauth}
 
-{:footer}
+	{:footer}
+{userdata-subject:}Данные для авторизации на сайте {host}
+{userdata:}
+	<p>Добрый день!</p>
+	<p>
+		Перейдите по <b><a href="{link}&src={page}">ссылке</a></b> для быстрой авторизации
+	</p>
+	{:handauth}
+	{:footer}
+{handauth:}
+	<p>
+		Для <a href="{path}user/signin">авторизации вручную</a> используйте:<br>
+		Логин: {email}<br>
+		Пароль: {user.password}<br>
+	</p>
+{footer:}
+	<p>
+		С уважением, <a href="{host}">{host}</a><br>
+		Поддержка: <a href="{path}{conf.support}">{path}{conf.support}</a>
 
-{footer:}С уважением, <a href="{host}">{host}</a>
-Поддержка: <a href="{path}{conf.support}">{path}{conf.support}</a>
-
-{conf.vk:vk}
-{conf.twitter:twitter}
-{conf.facebook:facebook}
-
+		{conf.vk:vk}
+		{conf.twitter:twitter}
+		{conf.facebook:facebook}
+	</p>
 {twitter:}Twitter: <a href="{.}">{.}</a>
 {facebook:}Facebook: <a href="{.}">{.}</a>
 {vk:}Наша группа ВКонтакте: <a href="{.}">{.}</a>
