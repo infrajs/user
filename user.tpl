@@ -184,6 +184,14 @@
 					{config.ans.msg:alert}
 				</div>-->
 			</form>
+			<script type="module">
+				import { Form } from '/vendor/akiyatkin/form/Form.js'
+				import { Session } from '/vendor/infrajs/session/Session.js'
+
+				Form.after('submit', async () => {
+					await Session.async()
+				})
+			</script>
 		</div>
 	</div>
 {inp-email:}
