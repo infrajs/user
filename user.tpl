@@ -4,7 +4,7 @@
 {breadcrumbs:}
 	<ol class="breadcrumb" style="float:right;">
 		<li class="breadcrumb-item active">
-			<a style="opacity:0.5; font-weight:{User.lang()=:ru?:bold}" href="?-env={Env.name()}:lang=ru">RU</a>&nbsp;<a style="opacity:0.5; font-weight:{User.lang()=:en?:bold}" href="?-env={Env.name()}:lang=en">EN</a>
+			<a style="opacity:0.5; font-weight:{User.lang()=:ru?:bold}" href="?-env={Env.getName()}:lang=ru">RU</a>&nbsp;<a style="opacity:0.5; font-weight:{User.lang()=:en?:bold}" href="?-env={Env.getName()}:lang=en">EN</a>
 		</li>
 	</ol>
 	<ol class="breadcrumb">
@@ -62,11 +62,13 @@
 			{:inp-email}
 			<div class="form-group" style="margin-top:20px">
 				<div class="controls">
-					<button class="btn btn-success">{User.lang(:Remind)}</button>
-					<span style="margin-left:10px">
+					<p>
+						<button class="btn btn-success">{User.lang(:Remind)}</button>
+					</p>
+					<p>
 						<a href="/user/signup">{User.lang(Controller.ids.user.childs.signup.title)}</a>,
 						<a href="/user/signin">{User.lang(Controller.ids.user.childs.signin.title)}</a>
-					</span>
+					</p>
 				</div>
 			</div>
 		{:/form}
@@ -140,11 +142,13 @@
 		<div class="form-group" style="margin-top:20px">
 			<!-- Button -->
 			<div class="controls">
-				<button class="btn btn-success">{User.lang(Controller.ids.user.childs.signin.title)}</button>
-				<span style="margin-left:10px">
+				<p>
+					<button class="btn btn-success">{User.lang(Controller.ids.user.childs.signin.title)}</button>
+				</p>
+				<p>
 					<a href="/user/signup">{User.lang(Controller.ids.user.childs.signup.title)}</a>,
 					<a href="/user/remind">{User.lang(Controller.ids.user.childs.remind.title)}</a>
-				</span>
+				</p>
 			</div>
 		</div>
 	{:/form}
@@ -161,15 +165,22 @@
 			<input class="form-check-input" name="terms" autosave="0" type="checkbox">{User.lang(:I have read and agree to the)} <a href="{~path(Config.get(:struser).terms)}">{User.lang(:terms of service)}</a>
 		</div>
 		<div class="form-group" style="margin-top:20px">
-			<button class="btn btn-success">{User.lang(Controller.ids.user.childs.signup.title)}</button>
-			<span style="margin-left:10px">
+			<p>
+				<button class="btn btn-success">{User.lang(Controller.ids.user.childs.signup.title)}</button>
+			</p>
+			<p>
 				<a href="/user/signin">{User.lang(Controller.ids.user.childs.signin.title)}</a>,
 				<a href="/user/remind">{User.lang(Controller.ids.user.childs.remind.title)}</a>
-			</span>
+			</p>
 		</div>
 	{:/form}
 	{struser:}user
 {form:}
+	<style>
+		#{div} .controls a {
+			white-space: nowrap;
+		}
+	</style>
 	<div class="row">
 		<div class="col-md-8">
 			<form 

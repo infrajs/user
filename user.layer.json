@@ -9,7 +9,7 @@
 			"tpl":"-user/user.tpl",
 			"json":"-user/get.php?type=user",
 			"tplroot":"breadcrumbs",
-			"parsedtpl":"{crumb.child.name}{Env.name()}",
+			"parsedtpl":"{crumb.child.name}{Env.getName()}",
 			"global":"user"
 		},
 		"userbody":{
