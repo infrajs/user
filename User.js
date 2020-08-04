@@ -1,23 +1,33 @@
+import { View } from '/vendor/infrajs/view/View.js'
+import { Global } from '/vendor/infrajs/layer-global/Global.js'
+import { Load } from '/vendor/akiyatkin/load/Load.js'
+import { Lang } from '/vendor/infrajs/lang/Lang.js'
+
+
 let User = {
-    is: function() {
+    is: function () {
         var user = this.get();
         return user.is;
     },
-    get: function() {
-        var json = '-user/get.php';
-        Global.unload('user', json)
-        return Load.loadJSON(json);
+    token: () => {
+        return View.getCOOKIE('token')
     },
-    isAdmin: function() {
+    get: async () => {
+        let src = '-user/whoami?token=' + User.token();
+        Global.unload('user', src)
+        let ans = await Load.fire('json', src)
+        return ans.user
+    },
+    isAdmin: function () {
         var user = this.get();
         return user.admin;
     },
-    getEmail: function() {
+    getEmail: function () {
         var user = this.get();
         return user.email;
     },
-    lang: function(str) {
-        if (typeof(str) == 'undefined') return Lang.name('user');
+    lang: function (str) {
+        if (typeof (str) == 'undefined') return Lang.name('user');
         return Lang.str('user', str);
     }
 }

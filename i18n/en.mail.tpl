@@ -13,7 +13,7 @@
 	<p>Hi!</p>
 	<p>Before we can give you access to all features, please confirm your account by clicking the link below.</p>
 
-	<p><a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a></p>
+	<p><a href="{path}/user/confirmkey/{email}/{key}">{path}/user/confirmkey/{email}/{key}</a></p>
 
 	{:footer}
 
@@ -22,42 +22,34 @@
 	<p>Hi!</p>
 	<p>If you wish to change your password, click the link below and enter your new password.</p>
 
-	<p><a href="{path}user/remindkey/{email}/{key}">{path}user/remindkey/{email}/{key}</a></p>
+	<p><a href="{path}/user/remindkey/{email}/{key}">{path}/user/remindkey/{email}/{key}</a></p>
 
 	{:footer}
 
 {newpass-subject:}Your {host} password has been changed
 {newpass:}
 	<p>The password for your account — {email} — was changed today.</p>
-
 	<p>If you made this change, then it's all good!</p>
-
 	<p>If you didn't make this change, contact support <a href="{path}{conf.support}">{path}{conf.support}</a> and we'll look into it for you.</p>
-
 	{:footer}
 
 {confirm-subject:}Confirm Your {host} Account
 {confirm:}
 	<p>Hi!</p>
-	<p>To complete your account, you must click the link below and confirm your email address.</p>
-
-	<p><a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a></p>
-
+	{:msgconfirm}
 	{:footer}
 
 {welcome-subject:}Welcome to {host}
 {welcome:}
 	<p>Welcome!</p>
 	<p>Thank you for creating an account.</p>
-	<p>Your account: <a href="{path}user">{path}user</a></p>
-
+	{:msgconfirm}
+	{:handauth}
 	{:footer}
+
 {userdata-subject:}Данные для авторизации на сайте {host}
 {userdata:}
 	<p>Добрый день!</p>
-	<p>
-		Перейдите по <b><a href="{link}&src={page}">ссылке</a></b> для быстрой авторизации
-	</p>
 	{:handauth}
 	{:footer}
 {footer:}
@@ -65,15 +57,18 @@
 		Thanks, {host}<br>
 		Support: <a href="{path}{conf.support}">{path}{conf.support}</a>
 	</p>
-	<p>
-		{conf.twitter:twitter}
-		{conf.facebook:facebook}
-	</p>
-{twitter:}Follow the {host} team on Twitter: {.}<br>
-{facebook:}We're also on Facebook: {.}<br>
+{soc:}
+	Follow the {host} team on Twitter: {.}<br>
+	We're also on Facebook: {.}<br>
 {handauth:}
+	<p>Quick login link: <a href="{path}{page}?token={token}">{path}{page}</a></p>
 	<p>
-		Для <a href="{path}user/signin">авторизации вручную</a> используйте:<br>
-		Логин: {email}<br>
-		Пароль: {user.password}<br>
+		For manual authorization <a href="{path}/user/signin">{path}/user/signin</a><br>
+		Login: {email}<br>
+		Password: {password}<br>
+	</p>
+{msgconfirm:}
+	<p>
+		To complete your account, click the link below and confirm your email address.
+		<a href="{path}/user/confirmkey/{email}/{key}">{path}/user/confirmkey/{email}/{key}</a>
 	</p>

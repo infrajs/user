@@ -1,0 +1,109 @@
+{
+	"tpl":"-user/layout.tpl",
+	"tplroot":"root",
+	"divs":{
+		"userbreadcrumbs":{
+			"tpl":"-user/layout.tpl",
+			"jsontpl":"-user/api/whoami?lang={User.lang()}&token={User.token()}",
+			"tplroot":"breadcrumbs",
+			"parsedtpl":"{crumb.child.name}",
+			"global":"user"
+		},
+		"userbody":{
+			"title":"Personal account",
+			"tpl":"-user/layout.tpl",
+			"jsontpl":"-user/api/whoami?lang={User.lang()}&token={User.token()}",
+			"tplroot":"user",
+			"global":"user",
+			"id":"user",
+			"childs":{
+				"signin":{
+					"title":"Sign In",
+					"tpl":"-user/layout.tpl",
+					"jsontpl":"-user/api/{crumb.name}?lang={User.lang()}&token={User.token()}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"global":"user"
+				},
+				"signup":{
+					"title":"Sign Up",
+					"tpl":"-user/layout.tpl",
+					"jsontpl":"-user/api/{crumb.name}?back={Crumb.get.back=:ref?Crumb.referrer}&lang={User.lang()}&token={User.token()}",
+					"jsontpl2":"-user/get.php?type={crumb.name}&back={Crumb.get.back=:ref?Crumb.referrer}",
+					"jsontpl3":"-user/get.php?type={crumb.name}&back={Crumb.referrer}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"global":"user"
+				},
+				"logout":{
+					"title":"Logout",
+					"tpl":"-user/layout.tpl",
+					"jsontpl":"-user/api/{crumb.name}?lang={User.lang()}&token={User.token()}",
+					"jsontpl2":"-user/get.php?type={crumb.name}&back={Crumb.get.back=:ref?Crumb.referrer}",
+					"jsontpl3":"-user/get.php?type={crumb.name}&back={Crumb.referrer}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"global":"user"
+				},
+				"terms":{
+					"title":"Terms",
+					"tpltpl":"-user/i18n/{User.lang()}.terms.tpl",
+					"jsontpl":"-user/api/whoami?lang={User.lang()}&token={User.token()}"
+				},
+				"remindkey":{
+					"title":"Set a new password",
+					"tpl":"-user/layout.tpl",
+					"tplroottpl":"{crumb.name}",
+					"jsontpl":"-user/api/{crumb.name}?email={crumb.child.name}&key={crumb.child.child.name}&lang={User.lang()}&token={User.token()}",
+					"jsontpl2":"-user/get.php?type={crumb.name}&email={crumb.child.name}&key={crumb.child.child.name}",
+					"autosavename":"user",
+					"global":"user"
+				},
+				"remind":{
+					"title":"Forgot Password",
+					"tpl":"-user/layout.tpl",
+					"jsontpl":"-user/api/{crumb.name}?lang={User.lang()}&token={User.token()}",
+					"jsontpl2":"-user/get.php?type={crumb.name}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"global":"user"
+				},
+				"change":{
+					"title":"Change Password",
+					"tpl":"-user/layout.tpl",
+					"jsontpl":"-user/api/{crumb.name}?lang={User.lang()}&token={User.token()}",
+					"jsontpl2":"-user/get.php?type={crumb.name}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"global":"user"
+				},
+				"confirm":{
+					"title":"Confirm your email",
+					"tpl":"-user/layout.tpl",
+					"jsontpl2":"-user/api/whoami?lang={User.lang()}&token={User.token()}",
+					"jsontpl":"-user/api/{crumb.name}?lang={User.lang()}&token={User.token()}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"global":"user"
+				},
+				"list":{
+					"title":"List of users",
+					"tpl":"-user/admin.tpl",
+					"jsontpl":"-user/api/{crumb.name}?token={User.token()}",
+					"parsedtpl":"{User.lang()}",
+					"tplroottpl":"{crumb.name}",
+					"autosavename":"user",
+					"global":"user"
+				},
+				"confirmkey":{
+					"title":"Confirm your email",
+					"tpl":"-user/layout.tpl",
+					"tplroottpl":"{crumb.name}",
+					"jsontpl":"-user/api/{crumb.name}?email={crumb.child.name}&key={crumb.child.child.name}&lang={User.lang()}&token={User.token()}",
+					"autosavename":"user",
+					"global":"user"
+				}
+			}
+		}
+	}
+}

@@ -4,7 +4,9 @@
 {breadcrumbs:}
 	<ol class="breadcrumb" style="float:right;">
 		<li class="breadcrumb-item active">
-			<a style="opacity:0.5; font-weight:{User.lang()=:ru?:bold}" href="?-env={Env.getName()}:lang=ru">RU</a>&nbsp;<a style="opacity:0.5; font-weight:{User.lang()=:en?:bold}" href="?-env={Env.getName()}:lang=en">EN</a>
+			<a style="opacity:0.5; font-weight:{User.lang()=:ru?:bold}" href="?-env={Env.getName()}:lang=ru">RU</a>
+			&nbsp;
+			<a style="opacity:0.5; font-weight:{User.lang()=:en?:bold}" href="?-env={Env.getName()}:lang=en">EN</a>
 		</li>
 	</ol>
 	<ol class="breadcrumb">
@@ -12,16 +14,16 @@
 	  {crumb.child?:blong?:bshort}
 	</ol>
 	{bshort:}
-		<li class="breadcrumb-item active">{User.lang(:User)} {data.email}</li>
+		<li class="breadcrumb-item active">{User.lang(:User)} {data.user.email}</li>
 	{blong:}
-		<li class="breadcrumb-item"><a href="/user">{User.lang(:User)} {data.email}</a></li>
+		<li class="breadcrumb-item"><a href="/user">{User.lang(:User)} {data.user.email}</a></li>
 		<li class="breadcrumb-item active">{User.lang(Controller.ids.user.childs[crumb.child.name].title)}</li>
 {user:}
 	{:hat}
 	{userbody:}
 	<div class="row">
 		<div class="col-md-8">
-			{data.email?:userauth?:userguest}
+			{data.user.email?:userauth?:userguest}
 		</div>
 	</div>
 	{userguest:}
@@ -34,10 +36,15 @@
 		</p>
 	{userauth:}
 		{:lang.welcome-user}
-		{data.verify?:verified?:notverified}
+		{data.user.verify?:verified?:notverified}
 		<p>
 			<a href="/user/change">{User.lang(Controller.ids.user.childs.change.title)}</a>,
 			<a href="/user/logout">{User.lang(Controller.ids.user.childs.logout.title)}</a>
+		</p>
+		{data.user.admin?:adminlink}
+		{adminlink:}
+		<p>
+			<a class="text-danger" href="/user/list">{User.lang(Controller.ids.user.childs.list.title)}</a>
 		</p>
 		{notverified:}
 			<p>
@@ -99,14 +106,15 @@
 	{:hat}
 	{confirmbody:}
 	{:form}
-		{data.time?:alreadysent?:firstsent}
+		{:firstsent}
+		{data.datemail?:alreadysent}
 
 		<div class="form-group" style="margin-top:20px">
 			<button class="btn btn-success">{User.lang(:Send a letter to confirm)}</button>
 		</div>
 	{:/form}
 	{alreadysent:}
-		<p>{User.lang(:Еmail was sent on)} {~date(:Y-m-d H:i:s,data.time)}</p>
+		<p><i>{User.lang(:Еmail was sent on)} {~date(:Y-m-d H:i:s,data.datemail)}</i></p>
 	{firstsent:}
 		{:lang.descr-confirm}
 {confirmkey:}
@@ -130,7 +138,9 @@
 {hat:}
 	<h1>{User.lang(title)}</h1>
 	{config.ans.msg?config.ans.msg:alert}
-	{data.msg?data.msg:alert?:{tplroot}body}
+	{config.ans.result??:datamsg}
+	{datamsg:}
+		{data.msg?data.msg:alert?:{tplroot}body}
 {statename:}tplroot
 {signin:}
 	{:hat}
@@ -188,19 +198,44 @@
 			data-autosave="{autosavename}" 
 			data-goal="{goal}" 
 			data-global="{global}"
-			data-recaptcha="user"
-			class="form form-horizontal" action="/-user/get.php?type={tplroot}&submit=1" method="POST">
+			data-recaptcha2="user"
+			class="form-horizontal" action="/-user/api/{tplroot}?lang={User.lang()}&token={User.token()}" method="POST">
 	{/form:}
-				<!--<div>
-					{config.ans.msg:alert}
-				</div>-->
 			</form>
 			<script type="module">
 				import { Form } from '/vendor/akiyatkin/form/Form.js'
-				import { Session } from '/vendor/infrajs/session/Session.js'
-
-				Form.after('submit', async () => {
-					await Session.async()
+				import { View } from '/vendor/infrajs/view/View.js'
+				let div = document.getElementById('{div}')
+				let form = div.getElementsByTagName('form')[0]
+				Form.fire('init', form)
+				Form.after('submit', (f, ans) => {
+					if (f !== form) return
+					if (ans.token || ans.token === '') {
+						View.setCOOKIE('token', ans.token)
+					}
+					
+				})
+				Form.done('submit', async (f, ans) => {
+					if (f !== form) return
+					if (!ans.result) return
+					//Минимизируем связь сервера с интерфейсом.
+					
+					let { Crumb } = await import('/vendor/infrajs/controller/src/Crumb.js')
+					let back = '/user'
+					if (Crumb.get.back) {
+						if (Crumb.get.back = 'ref') {
+							back = Crumb.referrer
+						} else {
+							back = Crumb.get.back
+						}
+					}
+					Crumb.go(back)
+					
+					let action = "{tplroot}";
+					if (~['signin'].indexOf(action)) return;
+					let { Popup } = await import('/vendor/infrajs/popup/Popup.js')
+					await Popup.success(ans.msg)
+					
 				})
 			</script>
 		</div>
@@ -257,4 +292,4 @@
 	<div style="margin-top:20px;" class="alert alert-{..result?:success?:danger}">
 		{.}
 	</div>
-{lang::}-user/i18n/{Lang.name(:struser)}.tpl
+{lang::}-user/i18n/{User.lang()}.tpl

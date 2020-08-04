@@ -7,7 +7,6 @@
     },
     "require":{
         "infrajs/nostore":"~1",
-        "infrajs/session":"~1",
         "infrajs/config":"~1",
         "infrajs/lang":"~1",
         "infrajs/router":"~1",

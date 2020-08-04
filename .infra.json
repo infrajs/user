@@ -1,16 +1,20 @@
 {
 	"pub":["terms","lang"],
-	"sentEmail":"infrajs\\user\\User::mail",
     "admins":[],
     "terms":"/terms",
-    "support":"contacts",
-    "twitter":false,
+    "conf":"infrajs\\user\\User",
+    "support":"/contacts",
+    
     "require":"infra.php",
+    "update":"update.php",
     "dependencies":"event",
+    "relations":[],
     "js":["User.js","infra.js"],
     "lang":{
-    	"def":"en",
+    	"def":"ru",
     	"list":["en","ru"]
     },
+    "twitter":false,
+    "vk":false,
     "facebook":false
 }

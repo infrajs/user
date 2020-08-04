@@ -7,7 +7,7 @@
 	</p>
 {welcome-user:}
 	<p>
-		Welcome to your personal account. You are logged in as <b>{data.email}</b>.
+		Welcome to your personal account. You are logged in as <b>{data.user.email}</b>.
 	</p>
 {welcome-change:}
 	<p>Complete the form to change your password.</p>
@@ -16,7 +16,7 @@
 {welcome-remindkey:}
 	<p>Specify a new password.</p>
 {descr-confirm:}
-	<p>Will be sent an email with a link to confirm your address.</p>
+	<p>Will be sent an email with a link to confirm your address <b>{data.user.email}</b>.</p>
 {descr-remind:}
 	<p>Will be sent an email with a link to recover your password.</p>
 {welcome-signin:}<p>The entry to the personal account.</p>

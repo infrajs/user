@@ -14,7 +14,7 @@
 	<p>Перед тем, как Вам будут доступны все функции сайта, нужно подтвердить email. 
 	Для этого перейдите по следующей ссылке.</p>
 
-	<p><a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a></p>
+	<p><a href="{path}/user/confirmkey/{email}/{key}">{path}/user/confirmkey/{email}/{key}</a></p>
 
 	{:footer}
 
@@ -23,7 +23,7 @@
 	<p>Добрый день!</p>
 	<p>Если Вам действительно требуется изменить пароль, перейдите по следующей ссылке и укажите новый пароль.</p>
 
-	<p><a href="{path}user/remindkey/{email}/{key}">{path}user/remindkey/{email}/{key}</a></p>
+	<p><a href="{path}/user/remindkey/{email}/{key}">{path}/user/remindkey/{email}/{key}</a></p>
 
 	{:footer}
 
@@ -40,45 +40,39 @@
 {confirm-subject:}Подтвердите ваш аккаунт {host}
 {confirm:}
 	<p>Добрый день!</p>
-	<p>Для завершения регистрации нужно подтвердить Ваш email. Для этого нужно перейти по следующей ссылке.</p>
-
-	<p><a href="{path}user/confirmkey/{email}/{key}">{path}user/confirmkey/{email}/{key}</a></p>
-
+	{:msgconfirm}
 	{:footer}
 
 {welcome-subject:}Добро пожаловать на {host}
 {welcome:}
 	<p>Добрый день!</p>
-
 	<p>Спасибо за регистрацию!</p>
-
-	<p>Ссылка для быстрого входа: <a href="{link}">{path}</a></p>
+	{:msgconfirm}
 	{:handauth}
-
 	{:footer}
+
 {userdata-subject:}Данные для авторизации на сайте {host}
 {userdata:}
 	<p>Добрый день!</p>
-	<p>
-		Перейдите по <b><a href="{link}&src={page}">ссылке</a></b> для быстрой авторизации
-	</p>
+
 	{:handauth}
+
 	{:footer}
+
 {handauth:}
+	<p>Ссылка для быстрой авторизации: <a href="{path}{page}?token={token}">{path}{page}</a></p>
 	<p>
-		Для <a href="{path}user/signin">авторизации вручную</a> используйте:<br>
+		Ссылка для ввода логина и пароля: <a href="{path}/user/signin">{path}/user/signin</a><br>
 		Логин: {email}<br>
-		Пароль: {user.password}<br>
+		Пароль: {password}<br>
 	</p>
 {footer:}
 	<p>
 		С уважением, <a href="{host}">{host}</a><br>
 		Поддержка: <a href="{path}{conf.support}">{path}{conf.support}</a>
-
-		{conf.vk:vk}
-		{conf.twitter:twitter}
-		{conf.facebook:facebook}
 	</p>
-{twitter:}Twitter: <a href="{.}">{.}</a>
-{facebook:}Facebook: <a href="{.}">{.}</a>
-{vk:}Наша группа ВКонтакте: <a href="{.}">{.}</a>
+{msgconfirm:}
+	<p>
+		Для завершения регистрации нужно подтвердить Ваш email. Для этого перейдите по следующей ссылке:
+	 	<a href="{path}/user/confirmkey/{email}/{key}">{path}/user/confirmkey/{email}/{key}</a>
+	</p>
