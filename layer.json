@@ -6,7 +6,7 @@
 			"tpl":"-user/layout.tpl",
 			"jsontpl":"-user/api/whoami?lang={User.lang()}&token={User.token()}",
 			"tplroot":"breadcrumbs",
-			"parsedtpl":"{crumb.child.name}",
+			"parsedtpl":"{crumb.child.name}{Env.getName()}",
 			"global":"user"
 		},
 		"userbody":{

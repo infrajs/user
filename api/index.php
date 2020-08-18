@@ -34,7 +34,7 @@ $submit = ($_SERVER['REQUEST_METHOD'] === 'POST' || Ans::GET('submit', 'bool'));
 //$back = Ans::GET('back', 'string', '/user');
 //$ans['go'] = $back;
 
-$admin = $user ? in_array($user['email'], User::$conf['admin']) : false;
+$admin = ($user && $user['verify']) ? in_array($user['email'], User::$conf['admin']) : false;
 
 // $ans['lang'] = $lang;
 // $ans['token'] = $token;
@@ -53,7 +53,7 @@ return Rest::get(function () use ($ans, $lang, $user, $submit, $admin) {
 	unset($user['dateverify']);
 	unset($user['datetoken']);
 	unset($user['dateactive']);
-	if (!empty($user['email']))	$user['admin'] = in_array($user['email'], User::$conf['admin']);
+	if ($user) $user['admin'] = $admin;
 	$ans['user'] = $user;
 	return Ans::ret($ans);
 }, 'create', function () use ($ans, $lang, $user, $submit, $admin) {
@@ -164,7 +164,6 @@ return Rest::get(function () use ($ans, $lang, $user, $submit, $admin) {
 	if (!$fuser) return User::err($ans, $lang, 'U024');
 	unset($fuser['password']);
 	unset($fuser['token']);
-	$fuser['admin'] = in_array($fuser['email'], User::$conf['admin']);
 	$ans['user'] = $fuser;
 	return Ans::ret($ans);
 }, 'remind', function () use ($ans, $lang, $user, $submit, $admin) {

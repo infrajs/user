@@ -22,8 +22,8 @@ let User = {
         var user = this.get();
         return user.admin;
     },
-    getEmail: function () {
-        var user = this.get();
+    email: async () => {
+        var user = await this.get();
         return user.email;
     },
     lang: function (str) {

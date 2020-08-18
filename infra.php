@@ -13,13 +13,21 @@ Event::one('Controller.oninit', function () {
 		if ($user) {
 			View::setCOOKIE('token', $token);
 		}
+	} else {
+		$token = View::getCOOKIE('token');
+		$user = User::fromToken($token);
 	}
 	
 	Template::$scope['User'] = array();
-	Template::$scope['User']['token'] = function () {
+	Template::$scope['User']['token'] = function () use ($token) {
 		header('Cache-Control: no-store'); 
-		return View::getCOOKIE('token');
+		return $token;
 	};
+	// Template::$scope['User']['email'] = function () use ($user){
+	// 	header('Cache-Control: no-store'); 
+	// 	if (!$user) return;
+	// 	return $user['email'];
+	// };
 	Template::$scope['User']['lang'] = function ($stren = null) {
 		//Для контроллера функция
 		$lang = Lang::name('user');

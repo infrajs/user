@@ -12,6 +12,9 @@ use infrajs\event\Event;
 use infrajs\db\Db;
 use infrajs\ans\Ans;
 
+use infrajs\lang\LangAns;
+use infrajs\cache\CacheOnce;
+
 Event::$classes['User'] = function (&$user) {
 	return $user['user_id'];
 };
@@ -20,6 +23,22 @@ class User
 {
 	public static $tokenlen = 10;
 	public static $conf = array();
+
+	public static $name = 'user';
+	use LangAns;
+	use CacheOnce;
+	use UserMail;
+	public static function mailbefore(&$data)
+	{
+		$data['key'] = User::makeKey($data); //Чтобы подтвердить переход по ссылке на почте
+	}
+	public static function mailafter($data, $r)
+	{
+		if ($r) User::setDateMail($data);
+	}
+
+
+
 	public static function makeKey($user)
 	{
 		return md5($user['password'] . date('Y.m'));
@@ -35,6 +54,7 @@ class User
 	}
 	public static function setVerify($user)
 	{
+		User::$once = [];
 		$user_id = $user['user_id'];
 		$sql = 'UPDATE users
 				SET verify = 1, dateverify = now()
@@ -52,6 +72,7 @@ class User
 	}
 	public static function setEmail($user, $email)
 	{
+		User::$once = [];
 		$user['email'] = $email;
 		$user_id = $user['user_id'];
 		$sql = 'UPDATE users
@@ -61,6 +82,7 @@ class User
 	}
 	public static function setToken(&$user)
 	{
+		User::$once = [];
 		$token = User::makeToken();
 		$user['token'] = $token;
 		$user_id = $user['user_id'];
@@ -71,6 +93,7 @@ class User
 	}
 	public static function setPassword(&$user, $password)
 	{
+		User::$once = [];
 		$user['password'] = $password;
 		$user_id = $user['user_id'];
 		$user['password'] = $password;
@@ -79,69 +102,12 @@ class User
 				WHERE user_id = ?';
 		return Db::exec($sql, [$password, $user_id]);
 	}
-	public static function mail($user, $lang, $mailroot, $page = false)
+
+
+	public static function getList()
 	{
-		$email = $user['email'];
-		$data = $user;
-		if ($page) $data['page'] = $page;
-
-		$https = 'http://';
-		if (isset($_SERVER['HTTPS'])) $https = 'https://';
-		if (isset($_SERVER['REQUEST_SCHEME'])) $https = $_SERVER['REQUEST_SCHEME'] . '://';
-
-		$data['host'] = $_SERVER['HTTP_HOST'];
-		$data['path'] = $https . $data['host'];
-		$data['conf'] = User::$conf;
-		$data['key'] = User::makeKey($user); //Чтобы подтвердить переход по ссылке на почте
-		$data['email'] = $email;
-		$data['time'] = time();
-		$data['token'] = $user['user_id'] . '-' . $user['token'];
-
-		$tpl = '-user/i18n/' . $lang . '.mail.tpl';
-		$subject = Template::parse($tpl, $data, $mailroot . '-subject');
-		$body = Template::parse($tpl, $data, $mailroot);
-		$r = Mail::html($subject, $body, true, $email); //from to
-		if ($r) User::setDateMail($user);
-		return $r;
-	}
-	public static function lang($lang, $str)
-	{
-		return Lang::lang($lang, 'user', $str);
-	}
-
-	//Без кода ошибки в сообщении
-	public static function err($ans, $lang = null, $code = null)
-	{
-		if (is_null($code)) return Ans::err($ans);
-		$r = explode('.', $code);
-		$msg = User::lang($lang, $r[0]);
-		$ans['code'] = $code;
-		return Ans::err($ans, $msg);
-	}
-	//С кодом ошибки в сообщении
-	public static function fail($ans, $lang = null, $code = null)
-	{
-		if (is_null($code)) return Ans::err($ans);
-		$r = explode('.', $code);
-		$msg = User::lang($lang, $r[0]);
-		$msg .= '. ' . User::lang($lang, 'Code') . ' ' . $code . '';
-		$ans['code'] = $code;
-
-		return Ans::err($ans, $msg);
-	}
-	//Без кода ошибки в сообщении
-	public static function ret($ans, $lang = null, $code = null)
-	{
-		if (is_null($code)) return Ans::ret($ans);
-		$r = explode('.', $code);
-		$msg = User::lang($lang, $r[0]);
-		if ($code) $ans['code'] = $code;
-		return Ans::ret($ans, $msg);
-	}
-
-
-	public static function getList() {
-		$sql = 'SELECT 
+		return User::once('getList', '', function () {
+			$sql = 'SELECT 
 			user_id, password, verify, token, email, 
 			UNIX_TIMESTAMP(datecreate) as datecreate,
 			UNIX_TIMESTAMP(datesignup) as datesignup,
@@ -150,39 +116,48 @@ class User
 			UNIX_TIMESTAMP(datetoken) as datetoken,
 			UNIX_TIMESTAMP(datemail) as datemail
 			FROM users LIMIT 0,1000';
-		$list = Db::all($sql);
-		return $list;
+			$list = Db::all($sql);
+			return $list;
+		});
 	}
 	public static function getById($user_id)
 	{
-		$sql = 'SELECT 
-			user_id, password, verify, token, email, 
-			UNIX_TIMESTAMP(datecreate) as datecreate,
-			UNIX_TIMESTAMP(datesignup) as datesignup,
-			UNIX_TIMESTAMP(dateverify) as dateverify,
-			UNIX_TIMESTAMP(dateactive) as dateactive,
-			UNIX_TIMESTAMP(datetoken) as datetoken,
-			UNIX_TIMESTAMP(datemail) as datemail
-			FROM users where user_id = ?';
-		$user = Db::fetch($sql, [$user_id]);
-		return $user;
+		return static::once('getById', $user_id, function ($user_id) {
+
+			$sql = 'SELECT 
+				user_id, password, verify, token, email, 
+				UNIX_TIMESTAMP(datecreate) as datecreate,
+				UNIX_TIMESTAMP(datesignup) as datesignup,
+				UNIX_TIMESTAMP(dateverify) as dateverify,
+				UNIX_TIMESTAMP(dateactive) as dateactive,
+				UNIX_TIMESTAMP(datetoken) as datetoken,
+				UNIX_TIMESTAMP(datemail) as datemail
+				FROM users where user_id = ?';
+			$user = Db::fetch($sql, [$user_id]);
+			if ($user) $user['admin'] = $user['verify'] && in_array($user['email'], User::$conf['admin']);
+
+			return $user;
+		});
 	}
 	public static function getByEmail($email)
 	{
-		$sql = 'SELECT
-			user_id, password, verify, token, email, 
-			UNIX_TIMESTAMP(datecreate) as datecreate,
-			UNIX_TIMESTAMP(datesignup) as datesignup,
-			UNIX_TIMESTAMP(dateverify) as dateverify,
-			UNIX_TIMESTAMP(dateactive) as dateactive,
-			UNIX_TIMESTAMP(datetoken) as datetoken,
-			UNIX_TIMESTAMP(datemail) as datemail
-			FROM users where email = ?';
-		$user = Db::fetch($sql, [$email]);
-		return $user;
+		return User::once('getByEmail', $email, function ($email) {
+			$sql = 'SELECT
+				user_id, password, verify, token, email, 
+				UNIX_TIMESTAMP(datecreate) as datecreate,
+				UNIX_TIMESTAMP(datesignup) as datesignup,
+				UNIX_TIMESTAMP(dateverify) as dateverify,
+				UNIX_TIMESTAMP(dateactive) as dateactive,
+				UNIX_TIMESTAMP(datetoken) as datetoken,
+				UNIX_TIMESTAMP(datemail) as datemail
+				FROM users where email = ?';
+			$user = Db::fetch($sql, [$email]);
+			if ($user) $user['admin'] = in_array($user['email'], User::$conf['admin']);
+			return $user;
+		});
 	}
-	
-	
+
+
 	public static function fromToken($token)
 	{
 		if ($token == '') return [];
@@ -215,7 +190,8 @@ class User
 		$token = User::makeToken();
 
 		if ($email) $sql = 'INSERT INTO users (email, password, token, datesignup, datetoken, datecreate) VALUES(?,?,?,now(),now(),now())';
-		else $sql = 'INSERT INTO users (password, token, datetoken, datecreate) VALUES(?,?,now(),now())';
+		else $sql = 'INSERT INTO users (email, password, token, datetoken, datecreate) VALUES(?,?,?,now(),now())';
+
 		$user_id = Db::lastId($sql, [$email, $password, $token]);
 		if (!$user_id) return false;
 		return User::getById($user_id);
