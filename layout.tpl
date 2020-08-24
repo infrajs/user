@@ -61,16 +61,17 @@
 	{strchange:}change
 	{struser:}user
 {remind:}
-	{:hat}
+	{:hatifguest}
 	{remindbody:}
 		{:lang.welcome-remind}
-		<p>{data.time?:alreadysent?:firstsentremind}</p>
+		<p>{data.user.dateemail?:alreadysent?:firstsentremind}</p>
 		{:form}
 			{:inp-email}
 			<div class="form-group" style="margin-top:20px">
 				<div class="controls">
 					<p>
 						<button class="btn btn-success">{User.lang(:Remind)}</button>
+						{config.ans.msg?config.ans.msg:alert}
 					</p>
 					<p>
 						<a href="/user/signup">{User.lang(Controller.ids.user.childs.signup.title)}</a>,
@@ -82,7 +83,7 @@
 	{firstsentremind:}
 	{:lang.descr-remind}
 {remindkey:}
-	{:hat}
+	{:hatifguest}
 	{remindkeybody:}
 		{:lang.welcome-remindkey}
 		{:form}
@@ -92,36 +93,39 @@
 		{:inp-repeatpassword}
 		<div class="form-group" style="margin-top:20px">
 			<button class="btn btn-success">{User.lang(:Submit)}</button>
+			{config.ans.msg?config.ans.msg:alert}
 		</div>
 		{:/form}
 {logout:}
-	{:hat}
+	{:hatifauth}
 	{logoutbody:}
 	{:form}
 		<div class="form-group" style="margin-top:20px">
 			<button class="btn btn-danger">{User.lang(:Logout Now)}</button>
+			{config.ans.msg?config.ans.msg:alert}
 		</div>
 	{:/form}
 {confirm:}
-	{:hat}
+	{:hatifauth}
 	{confirmbody:}
 	{:form}
 		{:firstsent}
-		{data.datemail?:alreadysent}
+		{data.user.datemail?:alreadysent}
 
 		<div class="form-group" style="margin-top:20px">
 			<button class="btn btn-success">{User.lang(:Send a letter to confirm)}</button>
+			{config.ans.msg?config.ans.msg:alert}
 		</div>
 	{:/form}
 	{alreadysent:}
-		<p><i>{User.lang(:Еmail was sent on)} {~date(:Y-m-d H:i:s,data.datemail)}</i></p>
+		<p><i>{User.lang(:Еmail was sent on)} {~date(:Y-m-d H:i:s,data.user.datemail)}</i></p>
 	{firstsent:}
 		{:lang.descr-confirm}
 {confirmkey:}
 	<h1>{User.lang(title)}</h1>
 	{data.msg:alert}
 {change:}
-	{:hat}
+	{:hatifauth}
 	{changebody:}
 		{:lang.welcome-change}
 		{:form}
@@ -132,18 +136,28 @@
 				<!-- Button -->
 				<div class="controls">
 					<button class="btn btn-success">{User.lang(:Change)}</button>
+					{config.ans.msg?config.ans.msg:alert}
 				</div>
 			</div>
 		{:/form}
+{hatifauth:}
+	<h1>{User.lang(title)}</h1>
+	<!-- {config.ans.msg?config.ans.msg:alert} -->
+	{data.user.email?:{tplroot}body?data.msg:alert}
+{hatifguest:}
+	<h1>{User.lang(title)}</h1>
+	<!-- {config.ans.msg?config.ans.msg:alert} -->
+	{data.user.email?data.msg:alert?:datamsg}
+{datamsg:}
+	{config.ans.msg?config.ans.msg:alert}
+	{:{tplroot}body}
 {hat:}
 	<h1>{User.lang(title)}</h1>
 	{config.ans.msg?config.ans.msg:alert}
-	{config.ans.result??:datamsg}
-	{datamsg:}
-		{data.msg?data.msg:alert?:{tplroot}body}
+	{:{tplroot}body}
 {statename:}tplroot
 {signin:}
-	{:hat}
+	{:hatifguest}
 	{signinbody:}
 	{:lang.welcome-signin}
 	{:form}
@@ -154,6 +168,7 @@
 			<div class="controls">
 				<p>
 					<button class="btn btn-success">{User.lang(Controller.ids.user.childs.signin.title)}</button>
+					{config.ans.msg?config.ans.msg:alert}
 				</p>
 				<p>
 					<a href="/user/signup">{User.lang(Controller.ids.user.childs.signup.title)}</a>,
@@ -163,7 +178,7 @@
 		</div>
 	{:/form}
 {signup:}
-	{:hat}
+	{:hatifguest}
 	{signupbody:}
 	{:lang.welcome-signup}
 	{:form}
@@ -177,6 +192,7 @@
 		<div class="form-group" style="margin-top:20px">
 			<p>
 				<button class="btn btn-success">{User.lang(Controller.ids.user.childs.signup.title)}</button>
+				{config.ans.msg?config.ans.msg:alert}
 			</p>
 			<p>
 				<a href="/user/signin">{User.lang(Controller.ids.user.childs.signin.title)}</a>,
@@ -200,14 +216,23 @@
 			data-global="{global}"
 			data-recaptcha2="user"
 			class="form-horizontal" action="/-user/api/{tplroot}?lang={User.lang()}&token={User.token()}" method="POST">
+			<input type="hidden" name="timezone">
+			<input type="hidden" name="city_id">
 	{/form:}
 			</form>
 			<script type="module">
 				import { Form } from '/vendor/akiyatkin/form/Form.js'
 				import { View } from '/vendor/infrajs/view/View.js'
+				import { City } from '/vendor/akiyatkin/city/City.js'
+
 				let div = document.getElementById('{div}')
 				let form = div.getElementsByTagName('form')[0]
 				Form.fire('init', form)
+				Form.before('submit', f => {
+					if (f !== form) return
+					form.elements.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+					form.elements.city_id.value = City.id();
+				})
 				Form.after('submit', (f, ans) => {
 					if (f !== form) return
 					if (ans.token || ans.token === '') {

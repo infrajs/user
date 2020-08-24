@@ -29,5 +29,10 @@
     "U030":"Password changed",
     "U031":"Address already verified",
     "U032":"All done. Address verified",
-    "U033":"Follow-up letter can be sent in 5 minutes"
+    "U033":"Follow-up letter can be sent in 5 minutes",
+	"U034":"Meta file error",
+	"U035":"Сity_id required",
+	"U036":"Timezone required",
+    "U037":"Lang required",
+	"U038":"Еmail or user_id required"
 }

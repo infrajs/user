@@ -50,63 +50,134 @@ class User
 		$sql = 'UPDATE users
 				SET datemail = now()
 				WHERE user_id = ?';
-		return Db::exec($sql, [$user_id]);
+		$r = Db::exec($sql, [$user_id]) !== false;
+		return $r;
 	}
-	public static function setVerify($user)
+	public static function setEnv(&$fuser, $timezone, $lang, $city_id)
 	{
-		User::$once = [];
+		static::$once = [];
+		$fuser['timezone'] = $timezone;
+		$fuser['lang'] = $lang;
+		$fuser['city_id'] = $city_id;
+
+		$user_id = $fuser['user_id'];
+		$sql = 'UPDATE users
+				SET lang = :lang, timezone = :timezone, city_id = :city_id
+				WHERE user_id = :user_id';
+		$r = Db::exec($sql, [
+			':user_id' => $user_id,
+			':lang' => $lang,
+			':timezone' => $timezone,
+			':city_id' => $city_id
+		]) !== false;
+		return $r;
+	}
+	public static function setLang(&$fuser, $lang)
+	{
+		static::$once = [];
+		$fuser['lang'] = $lang;
+		$user_id = $fuser['user_id'];
+		$sql = 'UPDATE users
+				SET lang = :lang
+				WHERE user_id = :user_id';
+		$r = Db::exec($sql, [
+			':user_id' => $user_id,
+			':lang' => $lang
+		]) !== false;
+		return $r;
+	}
+	public static function setCity(&$fuser, $city_id)
+	{
+		static::$once = [];
+		$fuser['city_id'] = $city_id;
+		$user_id = $fuser['user_id'];
+		$sql = 'UPDATE users
+				SET city_id = :city_id
+				WHERE user_id = :user_id';
+		$r = Db::exec($sql, [
+			':user_id' => $user_id,
+			':city_id' => $city_id
+		]) !== false;
+		return $r;
+	}
+	public static function setTimezone(&$fuser, $timezone)
+	{
+		static::$once = [];
+		$fuser['timezone'] = $timezone;
+		$user_id = $fuser['user_id'];
+		$sql = 'UPDATE users
+				SET timezone = :timezone
+				WHERE user_id = :user_id';
+		$r = Db::exec($sql, [
+			':user_id' => $user_id,
+			':timezone' => $timezone
+		]) !== false;
+		return $r;
+	}
+
+	public static function setVerify(&$user)
+	{
+		static::$once = [];
 		$user_id = $user['user_id'];
+		$user['verify'] = 1;
 		$sql = 'UPDATE users
 				SET verify = 1, dateverify = now()
-				WHERE user_id = ?';
-		return Db::exec($sql, [$user_id]);
+				WHERE user_id = :user_id';
+		$r = Db::exec($sql, [
+			':user_id' => $user_id
+		]) != false;
+		return $r;
 	}
 	public static function setActive($user)
 	{
-		if ($user['dateactive'] + 60 > time()) return;
+		if ($user['dateactive'] && $user['dateactive'] + 60 > time()) return;
 		$user_id = $user['user_id'];
 		$sql = 'UPDATE users
 				SET dateactive = now()
-				WHERE user_id = ?';
-		return Db::exec($sql, [$user_id]);
+				WHERE user_id = :user_id';
+		$r = Db::exec($sql, [
+			':user_id' => $user_id
+		]) != false;
+		return $r;
 	}
-	public static function setEmail($user, $email)
+	public static function setEmail(&$user, $email)
 	{
-		User::$once = [];
+		static::$once = [];
 		$user['email'] = $email;
 		$user_id = $user['user_id'];
 		$sql = 'UPDATE users
 				SET email = ?, datesignup = now()
 				WHERE user_id = ?';
-		return Db::exec($sql, [$email, $user_id]);
+		$r = Db::exec($sql, [$email, $user_id]) !== false;
+		return $r;
 	}
 	public static function setToken(&$user)
 	{
-		User::$once = [];
+		static::$once = [];
 		$token = User::makeToken();
 		$user['token'] = $token;
 		$user_id = $user['user_id'];
 		$sql = 'UPDATE users
 				SET token = ?, datetoken = now()
 				WHERE user_id = ?';
-		return Db::exec($sql, [$token, $user_id]);
+		return Db::exec($sql, [$token, $user_id]) !== false;
 	}
 	public static function setPassword(&$user, $password)
 	{
-		User::$once = [];
+		static::$once = [];
 		$user['password'] = $password;
 		$user_id = $user['user_id'];
 		$user['password'] = $password;
 		$sql = 'UPDATE users
 				SET password = ?
 				WHERE user_id = ?';
-		return Db::exec($sql, [$password, $user_id]);
+		return Db::exec($sql, [$password, $user_id]) !== false;
 	}
 
 
 	public static function getList()
 	{
-		return User::once('getList', '', function () {
+		return static::once('getList', '', function () {
 			$sql = 'SELECT 
 			user_id, password, verify, token, email, 
 			UNIX_TIMESTAMP(datecreate) as datecreate,
@@ -125,15 +196,17 @@ class User
 		return static::once('getById', $user_id, function ($user_id) {
 
 			$sql = 'SELECT 
-				user_id, password, verify, token, email, 
+				user_id, password, verify, token, email, timezone, lang, city_id,
 				UNIX_TIMESTAMP(datecreate) as datecreate,
 				UNIX_TIMESTAMP(datesignup) as datesignup,
 				UNIX_TIMESTAMP(dateverify) as dateverify,
 				UNIX_TIMESTAMP(dateactive) as dateactive,
 				UNIX_TIMESTAMP(datetoken) as datetoken,
 				UNIX_TIMESTAMP(datemail) as datemail
-				FROM users where user_id = ?';
-			$user = Db::fetch($sql, [$user_id]);
+				FROM users where user_id = :user_id';
+			$user = Db::fetch($sql, [
+				':user_id' => $user_id
+			]);
 			if ($user) $user['admin'] = $user['verify'] && in_array($user['email'], User::$conf['admin']);
 
 			return $user;
@@ -142,22 +215,13 @@ class User
 	public static function getByEmail($email)
 	{
 		return User::once('getByEmail', $email, function ($email) {
-			$sql = 'SELECT
-				user_id, password, verify, token, email, 
-				UNIX_TIMESTAMP(datecreate) as datecreate,
-				UNIX_TIMESTAMP(datesignup) as datesignup,
-				UNIX_TIMESTAMP(dateverify) as dateverify,
-				UNIX_TIMESTAMP(dateactive) as dateactive,
-				UNIX_TIMESTAMP(datetoken) as datetoken,
-				UNIX_TIMESTAMP(datemail) as datemail
-				FROM users where email = ?';
-			$user = Db::fetch($sql, [$email]);
-			if ($user) $user['admin'] = in_array($user['email'], User::$conf['admin']);
-			return $user;
+			$user_id = Db::col('SELECT user_id FROM users WHERE email = :email', [
+				':email' => $email
+			]);
+			if (!$user_id) return false;
+			return User::getById($user_id);
 		});
 	}
-
-
 	public static function fromToken($token)
 	{
 		if ($token == '') return [];
@@ -184,15 +248,25 @@ class User
 		$token = substr($token, 0, 6);
 		return $token;
 	}
-	public static function create($email = null, $password = null)
+	public static function create($lang, $city_id, $timezone, $email = null, $password = null)
 	{
+		//timezone, lang, city - pure функция должна получать эти значения параметрами
 		if (!$password) $password = User::makePassword();
 		$token = User::makeToken();
 
-		if ($email) $sql = 'INSERT INTO users (email, password, token, datesignup, datetoken, datecreate) VALUES(?,?,?,now(),now(),now())';
-		else $sql = 'INSERT INTO users (email, password, token, datetoken, datecreate) VALUES(?,?,?,now(),now())';
+		if ($email) $sql = 'INSERT INTO users (lang, city_id, timezone, email, password, token, datesignup, datetoken, datecreate) 
+			VALUES(:lang, :city_id, :timezone, :email,:password,:token,now(),now(),now())';
+		else $sql = 'INSERT INTO users (lang, city_id, timezone, email, password, token, datetoken, datecreate) 
+			VALUES(:lang, :city_id, :timezone, :email,:password,:token,now(),now())';
 
-		$user_id = Db::lastId($sql, [$email, $password, $token]);
+		$user_id = Db::lastId($sql, [
+			':lang' => $lang,
+			':city_id' => $city_id,
+			':timezone' => $timezone,
+			':email' => $email,
+			':password' => $password,
+			':token' => $token
+		]);
 		if (!$user_id) return false;
 		return User::getById($user_id);
 	}

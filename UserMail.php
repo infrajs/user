@@ -34,8 +34,16 @@ trait UserMail
 
         static::mailbefore($data);
 
+        
+        if (!empty($user['timezone'])) {
+            $nowtimezone = date_default_timezone_get();
+            @date_default_timezone_set($user['timezone']);
+        }
+
         $subject = Template::parse($tpl, $data, $mailroot . '-subject');
         $body = Template::parse($tpl, $data, $mailroot);
+        
+        if (!empty($user['timezone'])) @date_default_timezone_set($nowtimezone);
 
         $r = Mail::html($subject, $body, true, $admin ? true : $email); //from to
 

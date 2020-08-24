@@ -2,9 +2,11 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `password` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
-
-  `email` varchar(255),
-  `verify` int(1) unsigned,
+  `timezone` varchar(255) NOT NULL,
+  `lang` ENUM('ru','en') NOT NULL,
+  `email` varchar(255) NULL,
+  `verify` int(1) unsigned NULL,
+  `city_id` int(11) unsigned NOT NULL,
 
   `datecreate` DATETIME NULL DEFAULT NULL COMMENT 'Дата создания',
   `datesignup` DATETIME NULL DEFAULT NULL COMMENT 'Дата регистрации',
