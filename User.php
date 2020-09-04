@@ -53,6 +53,7 @@ class User
 		$r = Db::exec($sql, [$user_id]) !== false;
 		return $r;
 	}
+	
 	public static function setEnv(&$fuser, $timezone, $lang, $city_id)
 	{
 		static::$once = [];
@@ -72,48 +73,48 @@ class User
 		]) !== false;
 		return $r;
 	}
-	public static function setLang(&$fuser, $lang)
-	{
-		static::$once = [];
-		$fuser['lang'] = $lang;
-		$user_id = $fuser['user_id'];
-		$sql = 'UPDATE users
-				SET lang = :lang
-				WHERE user_id = :user_id';
-		$r = Db::exec($sql, [
-			':user_id' => $user_id,
-			':lang' => $lang
-		]) !== false;
-		return $r;
-	}
-	public static function setCity(&$fuser, $city_id)
-	{
-		static::$once = [];
-		$fuser['city_id'] = $city_id;
-		$user_id = $fuser['user_id'];
-		$sql = 'UPDATE users
-				SET city_id = :city_id
-				WHERE user_id = :user_id';
-		$r = Db::exec($sql, [
-			':user_id' => $user_id,
-			':city_id' => $city_id
-		]) !== false;
-		return $r;
-	}
-	public static function setTimezone(&$fuser, $timezone)
-	{
-		static::$once = [];
-		$fuser['timezone'] = $timezone;
-		$user_id = $fuser['user_id'];
-		$sql = 'UPDATE users
-				SET timezone = :timezone
-				WHERE user_id = :user_id';
-		$r = Db::exec($sql, [
-			':user_id' => $user_id,
-			':timezone' => $timezone
-		]) !== false;
-		return $r;
-	}
+	// public static function setLang(&$fuser, $lang)
+	// {
+	// 	static::$once = [];
+	// 	$fuser['lang'] = $lang;
+	// 	$user_id = $fuser['user_id'];
+	// 	$sql = 'UPDATE users
+	// 			SET lang = :lang
+	// 			WHERE user_id = :user_id';
+	// 	$r = Db::exec($sql, [
+	// 		':user_id' => $user_id,
+	// 		':lang' => $lang
+	// 	]) !== false;
+	// 	return $r;
+	// }
+	// public static function setCity(&$fuser, $city_id)
+	// {
+	// 	static::$once = [];
+	// 	$fuser['city_id'] = $city_id;
+	// 	$user_id = $fuser['user_id'];
+	// 	$sql = 'UPDATE users
+	// 			SET city_id = :city_id
+	// 			WHERE user_id = :user_id';
+	// 	$r = Db::exec($sql, [
+	// 		':user_id' => $user_id,
+	// 		':city_id' => $city_id
+	// 	]) !== false;
+	// 	return $r;
+	// }
+	// public static function setTimezone(&$fuser, $timezone)
+	// {
+	// 	static::$once = [];
+	// 	$fuser['timezone'] = $timezone;
+	// 	$user_id = $fuser['user_id'];
+	// 	$sql = 'UPDATE users
+	// 			SET timezone = :timezone
+	// 			WHERE user_id = :user_id';
+	// 	$r = Db::exec($sql, [
+	// 		':user_id' => $user_id,
+	// 		':timezone' => $timezone
+	// 	]) !== false;
+	// 	return $r;
+	// }
 
 	public static function setVerify(&$user)
 	{

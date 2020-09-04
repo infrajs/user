@@ -12,23 +12,11 @@
 
         },
         
-        "settimezone":{
+        "setenv":{
             "handlers":{
                 "timezone":true,
                 "post":true,
-                "fuser":true
-            }
-        },
-        "setlang":{
-            "handlers":{
-                "post":true,
-                "fuser":true
-            }
-        },
-        "setcity":{
-            "handlers":{
                 "city":true,
-                "post":true,
                 "fuser":true
             }
         },

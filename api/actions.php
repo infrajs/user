@@ -18,170 +18,175 @@ if ($action == 'whoami') {
     unset($user['datetoken']);
     unset($user['dateactive']);
     $ans['user'] = $user;
-    if (empty($user['email'])) return User::ret($ans, $lang, 'U021.4A');
-    return User::ret($ans, $lang, 'U020.2A');
+    if (empty($user['email'])) return User::ret($ans, $lang, 'U021.a'.__LINE__);
+    return User::ret($ans, $lang, 'U020.a'.__LINE__);
 
 } else if ($action == 'create') {
 
     $email = Ans::REQ('email');
     if ($email) {
-        if (!Mail::check($email)) return User::fail($ans, $lang, 'U006.2A');
-        if ($user && $user['email'] == $email) return User::err($ans, $lang, 'U005.2A');
+        if (!Mail::check($email)) return User::fail($ans, $lang, 'U006.a'.__LINE__);
+        if ($user && $user['email'] == $email) return User::err($ans, $lang, 'U005.a'.__LINE__);
         $fuser = User::getByEmail($email); // еще надо проверить есть ли уже такой емаил
-        if ($fuser) return User::fail($ans, $lang, 'U008.2A');
+        if ($fuser) return User::fail($ans, $lang, 'U008.a'.__LINE__);
     }
 
     $fuser = User::create($lang, $city_id, $timezone, $email); //user_id, token
-    if (!$fuser) return User::fail($ans, $lang, 'U014.2A');
+    if (!$fuser) return User::fail($ans, $lang, 'U014.a'.__LINE__);
     $ans['user'] = $fuser;
     $ans['token'] = $fuser['user_id'] . '-' . $fuser['token'];
 
-    return User::ret($ans, $lang, 'U017.1A');
+    return User::ret($ans, $lang, 'U017.a'.__LINE__);
 } else if ($action == 'signin') {
-    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.3A');
+    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.a'.__LINE__);
     
     $email = Ans::REQ('email');
-    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.3A');
+    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.a'.__LINE__);
 
     $fuser = User::getByEmail($email);
-    if (!$fuser) return User::err($ans, $lang, 'U019.1A');
+    if (!$fuser) return User::err($ans, $lang, 'U019.a'.__LINE__);
 
     $password = Ans::REQ('password');
-    if (!$password || $fuser['password'] !== $password) return User::err($ans, $lang, 'U018.1A');
+    if (!$password || $fuser['password'] !== $password) return User::err($ans, $lang, 'U018.a'.__LINE__);
 
     //При авторизации гостя сливаем
     if ($user) User::mergefromto($user, $fuser);
-    User::setTimezone($fuser, $timezone);
-    User::setCity($fuser, $city_id);
+
+    $r = User::setEnv($fuser, $timezone, $lang, $city['city_id']);
+    if (!$r) return User::fail($ans, $lang, 'Error.a'.__LINE__);
     $ans['token'] = $fuser['user_id'] . '-' . $fuser['token'];
     //depricated Авторизировать должен контроллер в REST-путях COOKIE.token. REST не работает с COOKKIE
     //signin возвращает token а контроллер-клиента его устанавливает
     //View::setCOOKIE('token', $ans['token']);
 
-    return User::ret($ans, $lang, 'U020.1A');
-} else if ($action == 'settimezone') {
-    $r = User::setTimezone($fuser, $timezone);
-    if (!$r) return User::fail($ans, $lang, 'Error.1A');
+    return User::ret($ans, $lang, 'U020.a'.__LINE__);
+} else if ($action == 'setenv') {
+    $r = User::setEnv($user, $timezone, $lang, $city['city_id']);
+    if (!$r) return User::fail($ans, $lang, 'Error.a'.__LINE__);
     return User::ret($ans);
-} else if ($action == 'setlang') {
-    $islang = Ans::REQ('lang', 'bool');
-    if (!$islang) return User::fail($ans, $lang, 'U037.1A');
-    $r = User::setLang($fuser, $lang);
-    if (!$r) return User::fail($ans, $lang, 'Error.2A');
-    return User::ret($ans);
-} else if ($action == 'setcity') {
-    $r = User::setCity($fuser, $city_id);
-    if (!$r) return User::fail($ans, $lang, 'Error.3A');
-    return User::ret($ans);
+// } else if ($action == 'settimezone') {
+//     $r = User::setTimezone($fuser, $timezone);
+//     if (!$r) return User::fail($ans, $lang, 'Error.a'.__LINE__);
+//     return User::ret($ans);
+// } else if ($action == 'setlang') {
+//     $islang = Ans::REQ('lang', 'bool');
+//     if (!$islang) return User::fail($ans, $lang, 'U037.a'.__LINE__);
+//     $r = User::setLang($fuser, $lang);
+//     if (!$r) return User::fail($ans, $lang, 'Error.a'.__LINE__);
+//     return User::ret($ans);
+// } else if ($action == 'setcity') {
+//     $r = User::setCity($fuser, $city_id);
+//     if (!$r) return User::fail($ans, $lang, 'Error.a'.__LINE__);
+//     return User::ret($ans);
 } else if ($action == 'signup') {
-    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.1A');
+    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.a'.__LINE__);
     $email = Ans::REQ('email');
-    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.1A');
+    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.a'.__LINE__);
 
     $olduser = User::getByEmail($email); // еще надо проверить есть ли уже такой емаил
-    if ($olduser) return User::err($ans, $lang, 'U008.1A');
+    if ($olduser) return User::err($ans, $lang, 'U008.a'.__LINE__);
 
     $password = Ans::REQ('password');
-    if (!User::checkPassword($password)) return User::err($ans, $lang, 'U009.1A');
+    if (!User::checkPassword($password)) return User::err($ans, $lang, 'U009.a'.__LINE__);
 
     $repeatpassword = Ans::REQ('repeatpassword');
-    if ($password != $repeatpassword) return User::err($ans, $lang, 'U010.1A');
+    if ($password != $repeatpassword) return User::err($ans, $lang, 'U010.a'.__LINE__);
 
     $terms = Ans::REQ('terms');
-    if (!$terms) return User::err($ans, $lang, 'U011.1A');
+    if (!$terms) return User::err($ans, $lang, 'U011.a'.__LINE__);
 
     //При авторизации гостя сливаем
     if ($user && empty($user['email'])) {
         User::setPassword($user, $password);
         User::setEmail($user, $email);
         User::setToken($user);
-        User::setTimezone($user, $timezone);
-        User::setCity($user, $city_id);
-        User::setLang($user, $lang);
+
+        User::setEnv($user, $timezone, $lang, $city_id);
+        
         $fuser = $user;
     } else {
         $fuser = User::create($lang, $city_id, $timezone, $email, $password); //user_id, token
-        if (!$fuser) return User::fail($ans, $lang, 'U014.1A');
+        if (!$fuser) return User::fail($ans, $lang, 'U014.a'.__LINE__);
     }
 
     $ans['token'] = $fuser['user_id'] . '-' . $fuser['token'];
     $ans['user'] = $fuser;
 
     $r = User::mail($fuser, $lang, 'welcome');
-    if (!$r) return User::ret($ans, $lang, 'U012.1A');
+    if (!$r) return User::ret($ans, $lang, 'U012.a'.__LINE__);
 
-    return User::ret($ans, $lang, 'U013.1A');
+    return User::ret($ans, $lang, 'U013.a'.__LINE__);
 } else if ($action == 'logout') {
-    if (!$user) return User::err($ans, $lang, 'U021.1A');
+    if (!$user) return User::err($ans, $lang, 'U021.a'.__LINE__);
     $ans['token'] = '';
-    return User::ret($ans, $lang, 'U022.1A');
+    return User::ret($ans, $lang, 'U022.a'.__LINE__);
 } else if ($action == 'user') {
     $fuser = false;
     $email = Ans::REQ('email');
     if ($email) {
-        if (!Mail::check($email)) return User::err($ans, $lang, 'U006.5A');
+        if (!Mail::check($email)) return User::err($ans, $lang, 'U006.a'.__LINE__);
         $fuser = User::getByEmail($email);
-        if (!$fuser) return User::err($ans, $lang, 'U025.1A');
+        if (!$fuser) return User::err($ans, $lang, 'U025.a'.__LINE__);
     }
     $user_id = Ans::REQ('user_id', 'int');
     if ($user_id) {
         $fuser = User::getById($user_id);
-        if (!$fuser) return User::err($ans, $lang, 'U025.2A');
+        if (!$fuser) return User::err($ans, $lang, 'U025.a'.__LINE__);
     }
 
-    if (!$fuser) return User::err($ans, $lang, 'U024.1A');
+    if (!$fuser) return User::err($ans, $lang, 'U024.a'.__LINE__);
     unset($fuser['password']);
     unset($fuser['token']);
     $ans['user'] = $fuser;
     return Ans::ret($ans);
 } else if ($action == 'remind') {
     //Гость с корзиной может вспоминать пароль и при этом сохранить корзину. Но если ты в аккаунте с email тогда объединения не будет, при восстановлении прароля ты итак вернёшься к своей корзине
-    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.4A');
+    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.a'.__LINE__);
 
     $email = Ans::REQ('email');
-    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.4A');
+    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.a'.__LINE__);
 
 
     $fuser = User::getByEmail($email);
-    if (!$fuser) return User::err($ans, $lang, 'U019.2A');
+    if (!$fuser) return User::err($ans, $lang, 'U019.a'.__LINE__);
 
-    if (isset($fuser['datemail']) && $fuser['datemail'] > time() - (60 * 5)) return User::err($ans, $lang, 'U033.1A');
+    if (isset($fuser['datemail']) && $fuser['datemail'] > time() - (60 * 5)) return User::err($ans, $lang, 'U033.a'.__LINE__);
 
     $r = User::mail($fuser, $lang, 'remind');
-    if (!$r) return User::ret($ans, $lang, 'U012.2A');
+    if (!$r) return User::ret($ans, $lang, 'U012.a'.__LINE__);
 
-    return User::ret($ans, $lang, 'U026.1A');
+    return User::ret($ans, $lang, 'U026.a'.__LINE__);
 } else if ($action == 'getremindkey') {
-    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.5A');
+    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.a'.__LINE__);
 
     $email = Ans::REQ('email');
-    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.5A');
+    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.a'.__LINE__);
 
     $fuser = User::getByEmail($email);
-    if (!$fuser) return User::err($ans, $lang, 'U019.3A');
+    if (!$fuser) return User::err($ans, $lang, 'U019.a'.__LINE__);
 
     $key = Ans::REQ('key');
-    if (User::makeKey($fuser) != $key) return User::err($ans, $lang, 'U027.1A');
+    if (User::makeKey($fuser) != $key) return User::err($ans, $lang, 'U027.a'.__LINE__);
 
     if (!$fuser['verify']) User::setVerify($fuser);
     return Ans::ret($ans);
 } else if ($action == 'remindkey') {
-    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.5A');
+    if (!empty($user['email'])) return User::err($ans, $lang, 'U005.a'.__LINE__);
 
     $email = Ans::REQ('email');
-    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.5A');
+    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.a'.__LINE__);
 
     $fuser = User::getByEmail($email);
-    if (!$fuser) return User::err($ans, $lang, 'U019.3A');
+    if (!$fuser) return User::err($ans, $lang, 'U019.a'.__LINE__);
 
     $key = Ans::REQ('key');
-    if (User::makeKey($fuser) != $key) return User::err($ans, $lang, 'U027.1A');
+    if (User::makeKey($fuser) != $key) return User::err($ans, $lang, 'U027.a'.__LINE__);
 
     $password = Ans::REQ('password');
-    if (!User::checkPassword($password)) return User::err($ans, $lang, 'U009.2A');
+    if (!User::checkPassword($password)) return User::err($ans, $lang, 'U009.a'.__LINE__);
 
     $repeatpassword = Ans::REQ('repeatpassword');
-    if ($password != $repeatpassword) return User::err($ans, $lang, 'U010.2A');
+    if ($password != $repeatpassword) return User::err($ans, $lang, 'U010.a'.__LINE__);
 
     User::setPassword($fuser, $password);
     User::setToken($fuser); //При восстановлении пароля, token сбрасывается
@@ -195,19 +200,19 @@ if ($action == 'whoami') {
     //$ans['go'] = '/user';
     //$ans['popup'] = true;
 
-    return User::ret($ans, $lang, 'U028.1A');
+    return User::ret($ans, $lang, 'U028.a'.__LINE__);
 } else if ($action == 'change') {
-    if (empty($user['email'])) return User::err($ans, $lang, 'U021.3A');
+    if (empty($user['email'])) return User::err($ans, $lang, 'U021.a'.__LINE__);
 
     $oldpassword = Ans::REQ('oldpassword');
 
-    if ($user['password'] != $oldpassword) return User::err($ans, $lang, 'U029');
+    if ($user['password'] != $oldpassword) return User::err($ans, $lang, 'U029.a'.__LINE__);
 
     $newpassword = Ans::REQ('newpassword');
-    if (!User::checkPassword($newpassword)) return User::err($ans, $lang, 'U009.3A');
+    if (!User::checkPassword($newpassword)) return User::err($ans, $lang, 'U009.a'.__LINE__);
 
     $repeatnewpassword = Ans::REQ('repeatnewpassword');
-    if ($newpassword != $repeatnewpassword) return User::err($ans, $lang, 'U010.1A');
+    if ($newpassword != $repeatnewpassword) return User::err($ans, $lang, 'U010.a'.__LINE__);
 
     User::setPassword($user, $newpassword);
     User::setToken($user);
@@ -216,35 +221,35 @@ if ($action == 'whoami') {
 
     User::mail($user, $lang, 'newpass');
 
-    return User::ret($ans, $lang, 'U030.1A');
+    return User::ret($ans, $lang, 'U030.a'.__LINE__);
 } else if ($action == 'confirm') {
     //if (!$submit) return User::fail($ans, $lang, 'U001.2');
-    if (empty($user['email'])) return User::err($ans, $lang, 'U021.2A');
-    if (!empty($user['verify'])) return User::ret($ans, $lang, 'U031.1A');
+    if (empty($user['email'])) return User::err($ans, $lang, 'U021.a'.__LINE__);
+    if (!empty($user['verify'])) return User::ret($ans, $lang, 'U031.a'.__LINE__);
     $ans['datemail'] = $user['datemail'];
 
-    if (isset($user['datemail']) && $user['datemail'] > time() - (60 * 5)) return User::err($ans, $lang, 'U033.1A');
+    if (isset($user['datemail']) && $user['datemail'] > time() - (60 * 5)) return User::err($ans, $lang, 'U033.a'.__LINE__);
 
     $r = User::mail($user, $lang, 'confirm');
-    if (!$r) return User::err($ans, $lang, 'U012.3A');
+    if (!$r) return User::err($ans, $lang, 'U012.a'.__LINE__);
 
-    return User::ret($ans, $lang, 'U026.2A');
+    return User::ret($ans, $lang, 'U026.a'.__LINE__);
 } else if ($action == 'list') {
     $ans['list'] = User::getList();
     return Ans::ret($ans);
 } else if ($action == 'confirmkey') {
     $email = Ans::REQ('email');
-    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.6A');
+    if (!Mail::check($email)) return User::err($ans, $lang, 'U006.a'.__LINE__);
 
     $fuser = User::getByEmail($email);
-    if (!$fuser) return User::fail($ans, $lang, 'U025.3A');
+    if (!$fuser) return User::fail($ans, $lang, 'U025.a'.__LINE__);
 
     $key = Ans::REQ('key');
-    if (User::makeKey($fuser) != $key) return User::err($ans, $lang, 'U027.2A');
+    if (User::makeKey($fuser) != $key) return User::err($ans, $lang, 'U027.a'.__LINE__);
 
-    if (!empty($fuser['verify'])) return User::ret($ans, $lang, 'U031.2A');
+    if (!empty($fuser['verify'])) return User::ret($ans, $lang, 'U031.a'.__LINE__);
 
     User::setVerify($fuser);
 
-    return User::ret($ans, $lang, 'U032.1A');
+    return User::ret($ans, $lang, 'U032.a'.__LINE__);
 }

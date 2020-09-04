@@ -23,7 +23,7 @@ $timezone = null;
 $city_id = null;
 $submit = ($_SERVER['REQUEST_METHOD'] === 'POST' || Ans::GET('submit', 'bool'));
 $meta = Rest::meta();
-if (!$meta) return User::fail($ans, $lang, 'U034.1I');
+if (!$meta) return User::fail($ans, $lang, 'U034.i'.__LINE__);
 
 $action = Rest::first();
 
