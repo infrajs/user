@@ -8,26 +8,41 @@ use infrajs\template\Template;
 use infrajs\view\View;
 use infrajs\env\Env;
 
+//Серверная часть. token может быть только в GET
 if (isset($_GET['token'])) {
 	$token = $_GET['token'];
 	$user = User::fromToken($token);
-	//Если менеджер работает за заказом, то время в отправляемом письме клиенту должно быть временем клиента, а не временем менеджера
+	//TODO Если менеджер работает за заказом, то время в отправляемом письме клиенту должно быть временем клиента, а не временем менеджера
 	if (!empty($user['timezone'])) {
 		@date_default_timezone_set($user['timezone']);
 	}
 }
+
+//Клиентская часть. token может быть в Cookies
 Event::one('Controller.oninit', function () {
-	$user = null;
+	
 	if (isset($_GET['token'])) {
 		$token = $_GET['token'];
 		$user = User::fromToken($token);
 		if ($user) {
+			$cookietoken = View::getCOOKIE('token');
+			if ($cookietoken) {
+				$old_user = User::fromToken($cookietoken);
+				if (!$old_user['email']) { //Можно мёрджить
+					//Если есть email значит были письма и мёрджить уже нельзя
+					User::mergefromto($old_user, $user);
+				}
+			}
 			View::setCOOKIE('token', $token);
 		} else {
-			$token = '';
+			$token = View::getCOOKIE('token');
+			//Если кривой token может не надо выходить?
+			//$token = '';
+			//View::setCOOKIE('token');
 		}
 	} else {
 		$token = View::getCOOKIE('token');
+		$user = null;
 	}
 	if (Ans::REQ('-env')) {
 		$user = User::fromToken($token);

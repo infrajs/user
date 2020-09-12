@@ -61,7 +61,7 @@
 	Follow the {host} team on Twitter: {.}<br>
 	We're also on Facebook: {.}<br>
 {handauth:}
-	<p>Quick login link: <a href="{path}{page}?token={token}">{path}{page}</a></p>
+	<p>Quick login link: <a href="{path}{page}?token={token}">{path}{page}?token={token}</a></p>
 	<p>
 		For manual authorization <a href="{path}/user/signin">{path}/user/signin</a><br>
 		Login: {email}<br>

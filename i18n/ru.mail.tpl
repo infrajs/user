@@ -60,7 +60,7 @@
 	{:footer}
 
 {handauth:}
-	<p>Ссылка для быстрой авторизации: <a href="{path}{page}?token={token}">{path}{page}</a></p>
+	<p>Ссылка для быстрой авторизации: <a href="{path}{page}?token={token}">{path}{page}?token={token}</a></p>
 	<p>
 		Ссылка для ввода логина и пароля: <a href="{path}/user/signin">{path}/user/signin</a><br>
 		Логин: {email}<br>

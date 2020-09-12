@@ -276,21 +276,13 @@ class User
 		return $str && strlen($str) > 2;
 	}
 	public static function mergefromto(&$user, $fuser)
-	{
-		$relations = User::$conf['relations']; //Массив с таблицами в которых нужно изменить user_id
-		foreach ($relations as $plugin) {
-			Config::get($plugin);
-			$user['to'] = $fuser;
-			Event::fire('User.merge', $user);
+	{	
+		$user['to'] = $fuser;
+		Event::fire('User.merge', $user);
 
-			//$sql = 'UPDATE ' . $tbl . ' SET user_id = ? WHERE user_id = ?';
-			//Db::exec($sql, [$fuser['user_id'], $user['user_id']]);
-			//myorders (user_id, active, order_id) [1-1]-1, [2-1]-2 = ([1-1]-1, [1-1]-2)
-			//Может быть только одна активная заявка
-		}
-		$user = [];
 		$sql = 'DELETE from users where user_id = ?';
 		Db::exec($sql, [$user['user_id']]);
+		$user = [];
 	}
 
 

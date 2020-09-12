@@ -8,7 +8,6 @@
     "require":"infra.php",
     "update":"update.php",
     "dependencies":"event",
-    "relations":[],
     "js":["User.js","infra.js"],
     "lang":{
     	"def":"ru",

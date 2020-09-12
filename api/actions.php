@@ -95,14 +95,12 @@ if ($action == 'whoami') {
     $terms = Ans::REQ('terms');
     if (!$terms) return User::err($ans, $lang, 'U011.a'.__LINE__);
 
-    //При авторизации гостя сливаем
+    //При авторизации гостя сливаем - user_id остаётся текущим, даже токен не меняем
     if ($user && empty($user['email'])) {
         User::setPassword($user, $password);
         User::setEmail($user, $email);
-        User::setToken($user);
-
+        //User::setToken($user);
         User::setEnv($user, $timezone, $lang, $city_id);
-        
         $fuser = $user;
     } else {
         $fuser = User::create($lang, $city_id, $timezone, $email, $password); //user_id, token

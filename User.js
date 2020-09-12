@@ -12,6 +12,10 @@ let User = {
     //     let ans = await Load.fire('json', src)
     //     return ans.user
     // },
+    logout: () => {
+    	View.setCOOKIE('token')
+    	Global.check('user')
+    },
     get: (type, param) => {
 		let src = User.src(type, param)
 		Global.unload('user', src)
