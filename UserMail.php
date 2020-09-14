@@ -4,6 +4,7 @@ namespace infrajs\user;
 
 use infrajs\template\Template;
 use infrajs\mail\Mail;
+use infrajs\path\Path;
 
 trait UserMail
 {
@@ -31,6 +32,11 @@ trait UserMail
         $data['token'] = $user['user_id'] . '-' . $user['token'];
 
         $tpl = '-' . static::$name . '/i18n/' . $lang . '.mail.tpl';
+        if (!Path::theme($tpl)) {
+            $lang = static::$conf['lang']['def'];
+            $tpl = '-' . static::$name . '/i18n/' . $lang . '.mail.tpl';
+        }
+        
 
         static::mailbefore($data);
 

@@ -103,6 +103,7 @@ if ($action == 'whoami') {
         User::setEnv($user, $timezone, $lang, $city_id);
         $fuser = $user;
     } else {
+        //if ($user['email']) Можно зарегистрироваться будучу уже зарегистрированным. Создасться новый пользователь и переключиться на него
         $fuser = User::create($lang, $city_id, $timezone, $email, $password); //user_id, token
         if (!$fuser) return User::fail($ans, $lang, 'U014.a'.__LINE__);
     }
@@ -233,7 +234,7 @@ if ($action == 'whoami') {
 
     return User::ret($ans, $lang, 'U026.a'.__LINE__);
 } else if ($action == 'list') {
-    $ans['list'] = User::getList();
+    $ans['list'] = User::getList($lang);
     return Ans::ret($ans);
 } else if ($action == 'confirmkey') {
     $email = Ans::REQ('email');

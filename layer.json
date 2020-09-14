@@ -86,7 +86,7 @@
 					"global":"user"
 				},
 				"list":{
-					"title":"List of users",
+					"title":"All users",
 					"tpl":"-user/admin.tpl",
 					"jsontpl":"-user/api/{crumb.name}?lang={User.lang()}&token={User.token()}",
 					"parsedtpl":"{User.lang()}",

@@ -176,18 +176,22 @@ class User
 	}
 
 
-	public static function getList()
+	public static function getList($lang)
 	{
-		return static::once('getList', '', function () {
-			$sql = 'SELECT 
-			user_id, password, verify, token, email, 
+		return static::once('getList', $lang, function ($lang) {
+			$name = $lang == 'ru' ? 'CityName' : 'EngName';
+			$sql = "SELECT 
+			user_id, password, verify, token, email, c.$name as city,
 			UNIX_TIMESTAMP(datecreate) as datecreate,
 			UNIX_TIMESTAMP(datesignup) as datesignup,
 			UNIX_TIMESTAMP(dateverify) as dateverify,
 			UNIX_TIMESTAMP(dateactive) as dateactive,
 			UNIX_TIMESTAMP(datetoken) as datetoken,
 			UNIX_TIMESTAMP(datemail) as datemail
-			FROM users LIMIT 0,1000';
+			FROM users u
+			LEFT JOIN city_cities c on c.city_id = u.city_id
+			WHERE email is not null
+			LIMIT 0,1000";
 			$list = Db::all($sql);
 			return $list;
 		});
