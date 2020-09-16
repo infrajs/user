@@ -87,20 +87,20 @@ class User
 	// 	]) !== false;
 	// 	return $r;
 	// }
-	// public static function setCity(&$fuser, $city_id)
-	// {
-	// 	static::$once = [];
-	// 	$fuser['city_id'] = $city_id;
-	// 	$user_id = $fuser['user_id'];
-	// 	$sql = 'UPDATE users
-	// 			SET city_id = :city_id
-	// 			WHERE user_id = :user_id';
-	// 	$r = Db::exec($sql, [
-	// 		':user_id' => $user_id,
-	// 		':city_id' => $city_id
-	// 	]) !== false;
-	// 	return $r;
-	// }
+	public static function setCity(&$fuser, $city_id)
+	{
+		static::$once = [];
+		$fuser['city_id'] = $city_id;
+		$user_id = $fuser['user_id'];
+		$sql = 'UPDATE users
+				SET city_id = :city_id
+				WHERE user_id = :user_id';
+		$r = Db::exec($sql, [
+			':user_id' => $user_id,
+			':city_id' => $city_id
+		]) !== false;
+		return $r;
+	}
 	// public static function setTimezone(&$fuser, $timezone)
 	// {
 	// 	static::$once = [];
@@ -281,6 +281,7 @@ class User
 	}
 	public static function mergefromto(&$user, $fuser)
 	{	
+		if ($user['user_id'] == $fuser['user_id']) return true;
 		$user['to'] = $fuser;
 		Event::fire('User.merge', $user);
 

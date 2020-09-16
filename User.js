@@ -5,7 +5,13 @@ import { Lang } from '/vendor/infrajs/lang/Lang.js'
 
 let User = {
     lang: Lang.fn('user'),
-    token: () => View.getCOOKIE('token'),
+    token: () => {
+    	const token = View.getCOOKIE('token')
+    	if (token) return token
+    	const session_id = View.getCOOKIE('infra_session_id')
+    	const pass = View.getCOOKIE('infra_session_pass')
+    	return session_id+'-'+pass
+    },
     // get: async () => {
     //     let src = '-user/whoami?token=' + User.token();
     //     Global.unload('user', src)
@@ -14,6 +20,8 @@ let User = {
     // },
     logout: () => {
     	View.setCOOKIE('token')
+    	View.setCOOKIE('infra_session_id')
+    	View.setCOOKIE('infra_session_pass')
     	Global.check('user')
     },
     get: (type, param) => {

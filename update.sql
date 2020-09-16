@@ -16,5 +16,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `datemail` DATETIME NULL DEFAULT NULL COMMENT 'Последняя дата отправленного письма: confirm, remind',
   
 
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`),
+  UNIQUE INDEX (`email`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;

@@ -30,10 +30,7 @@
             <tr class="success">
                 <th>{User.lang(:Email)}</th>
                 <th>{User.lang(:Password)}</th>
-                <th>{User.lang(:Token)}</th>
                 <th>{User.lang(:City)}</th>
-                <th>{User.lang(:Created)}</th>
-                <th>{User.lang(:Verified)}</th>
                 <th>{User.lang(:Activity)}</th>
             </tr>
         </thead>
@@ -68,11 +65,8 @@
     {user:}
         <tr>
             <td>{email}</td>
-            <td>{password}</td>
-            <td>{user_id}-{token}</td>
+            <td title="{user_id}-{token}">{password}</td>
             <td>{city}</td>
-            <td>{~date(:d.m.Y H:i,datecreate)}</td>
-            <td>{~date(:d.m.Y H:i,dateverify)}</td>
             <td>{~date(:d.m.Y H:i,dateactive)}</td>
         </tr>
 {hat:}
