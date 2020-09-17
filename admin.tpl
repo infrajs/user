@@ -38,7 +38,7 @@
             {data.list::user}
         </tbody>
     </table>
-    <script class="module">
+    <script type="module">
         const getSort = ({ target }) => {
             const order = (target.dataset.order = -(target.dataset.order || -1))
             const index = [...target.parentNode.cells].indexOf(target)
