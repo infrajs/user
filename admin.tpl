@@ -67,7 +67,7 @@
             <td>{email}</td>
             <td title="{user_id}-{token}">{password}</td>
             <td>{city}</td>
-            <td>{~date(:d.m.Y H:i,dateactive)}</td>
+            <td>{~date(:Y/m/d H:i,dateactive)}</td>
         </tr>
 {hat:}
 	<h1>{User.lang(title)}</h1>

@@ -191,6 +191,7 @@ class User
 			FROM users u
 			LEFT JOIN city_cities c on c.city_id = u.city_id
 			WHERE email is not null
+			order by dateactive DESC
 			LIMIT 0,1000";
 			$list = Db::all($sql);
 			return $list;
