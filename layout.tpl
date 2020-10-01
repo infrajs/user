@@ -249,7 +249,7 @@
 					let back = '/user'
 					if (Crumb.get.back) {
 						if (Crumb.get.back = 'ref') {
-							if (Crumb.referrer) back = Crumb.referrer
+							if (Crumb.referrer !== false) back = Crumb.referrer
 						} else {
 							back = Crumb.get.back
 						}
