@@ -8,6 +8,7 @@ use infrajs\view\View;
 use infrajs\load\Load;
 use infrajs\template\Template;
 use infrajs\mail\Mail;
+use infrajs\access\Access;
 use infrajs\event\Event;
 use infrajs\db\Db;
 use infrajs\ans\Ans;
@@ -213,7 +214,7 @@ class User
 			$user = Db::fetch($sql, [
 				':user_id' => $user_id
 			]);
-			if ($user) $user['admin'] = $user['verify'] && in_array($user['email'], User::$conf['admin']);
+			if ($user) $user['admin'] = (Access::isDebug() || $user['verify']) && in_array($user['email'], User::$conf['admin']);
 
 			return $user;
 		});
