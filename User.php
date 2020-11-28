@@ -214,7 +214,7 @@ class User
 			$user = Db::fetch($sql, [
 				':user_id' => $user_id
 			]);
-			if ($user) $user['admin'] = (Access::isDebug() || $user['verify']) && in_array($user['email'], User::$conf['admins']);
+			if ($user) $user['admin'] = (Access::isDebug() || $user['verify']) && in_array($user['email'], User::$conf['admin']);
 
 			return $user;
 		});

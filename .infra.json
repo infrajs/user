@@ -1,6 +1,6 @@
 {
 	"pub":["terms","lang"],
-    "admins":[],
+    "admin":[],
     "terms":"/terms",
     "conf":"infrajs\\user\\User",
     "support":"/contacts",
