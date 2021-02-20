@@ -28,6 +28,7 @@
     <table class="table_sort table table-sm table-striped">
         <thead class="thead-light">
             <tr class="success">
+                <th>ID</th>
                 <th>{User.lang(:Email)}</th>
                 <th>{User.lang(:Password)}</th>
                 <th>{User.lang(:City)}</th>
@@ -64,6 +65,7 @@
     </script>
     {user:}
         <tr>
+            <td>{user_id}</td>
             <td>{email}</td>
             <td title="{user_id}-{token}">{password}</td>
             <td>{city}</td>
