@@ -149,7 +149,7 @@ if ($action == 'whoami') {
     $fuser = User::getByEmail($email);
     if (!$fuser) return User::err($ans, $lang, 'U019.a'.__LINE__);
 
-    if (isset($fuser['datemail']) && $fuser['datemail'] > time() - (60 * 5)) return User::err($ans, $lang, 'U033.a'.__LINE__);
+    if (isset($fuser['datemail']) && $fuser['datemail'] > time() - (60)) return User::err($ans, $lang, 'maildelay.a'.__LINE__);
 
     $r = User::mail($fuser, $lang, 'remind');
     if (!$r) return User::ret($ans, $lang, 'U012.a'.__LINE__);
@@ -227,7 +227,7 @@ if ($action == 'whoami') {
     if (!empty($user['verify'])) return User::ret($ans, $lang, 'U031.a'.__LINE__);
     $ans['datemail'] = $user['datemail'];
 
-    if (isset($user['datemail']) && $user['datemail'] > time() - (60 * 5)) return User::err($ans, $lang, 'U033.a'.__LINE__);
+    if (isset($user['datemail']) && $user['datemail'] > time() - (60)) return User::err($ans, $lang, 'maildelay.a'.__LINE__);
 
     $r = User::mail($user, $lang, 'confirm');
     if (!$r) return User::err($ans, $lang, 'U012.a'.__LINE__);
