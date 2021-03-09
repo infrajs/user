@@ -319,4 +319,4 @@
 	<div style="margin-top:20px;" class="alert alert-{..result?:success?:danger}">
 		{.}
 	</div>
-{lang::}-user/i18n/{User.lang()}.tpl
+{lang::}-user/i18n/{User.lang()}.tpl?v={~conf.index.v}
