@@ -275,6 +275,7 @@ class User
 			':token' => $token
 		]);
 		if (!$user_id) return false;
+		User::$once = [];
 		return User::getById($user_id);
 	}
 	public static function checkPassword($str)
