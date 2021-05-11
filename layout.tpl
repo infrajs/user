@@ -21,10 +21,8 @@
 {user:}
 	{:hat}
 	{userbody:}
-	<div class="row">
-		<div class="col-md-8">
-			{data.user.email?:userauth?:userguest}
-		</div>
+	<div style="max-width: 1000px">
+		{data.user.email?:userauth?:userguest}
 	</div>
 	{userguest:}
 		
@@ -207,65 +205,63 @@
 			white-space: nowrap;
 		}
 	</style>
-	<div class="row">
-		<div class="col-md-8">
-			<form 
-			data-layerid="{id}"
-			data-autosave="{autosavename}" 
-			data-goal="{goal}" 
-			data-global="{global}"
-			data-recaptcha2="user"
-			class="form-horizontal" action="/-user/api/{tplroot}?lang={User.lang()}&token={User.token()}" method="POST">
-			<input type="hidden" name="timezone">
-			<input type="hidden" name="city_id">
+	<div style="max-width: 400px">
+		<form 
+		data-layerid="{id}"
+		data-autosave="{autosavename}" 
+		data-goal="{goal}" 
+		data-global="{global}"
+		data-recaptcha2="user"
+		class="form-horizontal" action="/-user/api/{tplroot}?lang={User.lang()}&token={User.token()}" method="POST">
+		<input type="hidden" name="timezone">
+		<input type="hidden" name="city_id">
 	{/form:}
-			</form>
-			<script type="module">
-				import { Form } from '/vendor/akiyatkin/form/Form.js'
-				import { View } from '/vendor/infrajs/view/View.js'
-				import { City } from '/vendor/akiyatkin/city/City.js'
+		</form>
+		<script type="module">
+			import { Form } from '/vendor/akiyatkin/form/Form.js'
+			import { View } from '/vendor/infrajs/view/View.js'
+			import { City } from '/vendor/akiyatkin/city/City.js'
 
-				let div = document.getElementById('{div}')
-				let form = div.getElementsByTagName('form')[0]
-				Form.fire('init', form)
-				Form.before('submit', f => {
-					if (f !== form) return
-					form.elements.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
-					form.elements.city_id.value = City.id();
-				})
-				Form.after('submit', (f, ans) => {
-					if (f !== form) return
-					if (ans.token || ans.token === '') {
-						View.setCOOKIE('token', ans.token)
-						View.setCOOKIE('infra_session_id')
-						View.setCOOKIE('infra_session_pass')
+			let div = document.getElementById('{div}')
+			let form = div.getElementsByTagName('form')[0]
+			Form.fire('init', form)
+			Form.before('submit', f => {
+				if (f !== form) return
+				form.elements.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+				form.elements.city_id.value = City.id();
+			})
+			Form.after('submit', (f, ans) => {
+				if (f !== form) return
+				if (ans.token || ans.token === '') {
+					View.setCOOKIE('token', ans.token)
+					View.setCOOKIE('infra_session_id')
+					View.setCOOKIE('infra_session_pass')
+				}
+				
+			})
+			Form.done('submit', async (f, ans) => {
+				if (f !== form) return
+				if (!ans.result) return
+				//Минимизируем связь сервера с интерфейсом.
+				
+				let { Crumb } = await import('/vendor/infrajs/controller/src/Crumb.js')
+				let back = '/user'
+				if (Crumb.get.back) {
+					if (Crumb.get.back = 'ref') {
+						if (Crumb.referrer !== false) back = Crumb.referrer
+					} else {
+						back = Crumb.get.back
 					}
-					
-				})
-				Form.done('submit', async (f, ans) => {
-					if (f !== form) return
-					if (!ans.result) return
-					//Минимизируем связь сервера с интерфейсом.
-					
-					let { Crumb } = await import('/vendor/infrajs/controller/src/Crumb.js')
-					let back = '/user'
-					if (Crumb.get.back) {
-						if (Crumb.get.back = 'ref') {
-							if (Crumb.referrer !== false) back = Crumb.referrer
-						} else {
-							back = Crumb.get.back
-						}
-					}
-					Crumb.go(back)
-					
-					let action = "{tplroot}";
-					if (~['signin'].indexOf(action)) return;
-					let { Popup } = await import('/vendor/infrajs/popup/Popup.js')
-					await Popup.success(ans.msg)
-					
-				})
-			</script>
-		</div>
+				}
+				Crumb.go(back)
+				
+				let action = "{tplroot}";
+				if (~['signin'].indexOf(action)) return;
+				let { Popup } = await import('/vendor/infrajs/popup/Popup.js')
+				await Popup.success(ans.msg)
+				
+			})
+		</script>
 	</div>
 {inp-email:}
 	<div class="form-group">
